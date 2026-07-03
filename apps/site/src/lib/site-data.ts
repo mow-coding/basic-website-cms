@@ -22,7 +22,7 @@ export const siteConfig = {
   email: "admin@example.com",
   description:
     "모오 임상심리연구소의 공개 웹사이트 데모입니다. 실제 소개 문구는 운영 환경에서 작성합니다.",
-  heroCopy: ["여기에 방문자에게 건네는 첫 번째 문장이 들어갑니다", "여기에 기관의 지향을 담은 두 번째 문장이 들어갑니다"],
+  heroCopy: ["여기에 소개 문장이 들어갑니다", "두 줄까지 쓸 수 있습니다"],
   colors: {
     blue: "#4E73AA",
     deepBlue: "#2A5F7F",
