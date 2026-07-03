@@ -10,38 +10,45 @@ const demoPostBody =
 
 const demoPosts = [
   {
-    title: "예시 공지사항 제목입니다",
+    title: "예시 공지사항입니다",
     category: "GENERAL",
     labels: [],
     authorEmail: adminEmail
   },
   {
-    title: "예시 프로그램 공지 제목입니다",
+    title: "예시 프로그램 공지입니다",
     category: "GENERAL",
-    labels: ["프로그램C"],
+    labels: ["프로그램A"],
     authorEmail: adminEmail
   },
   {
-    title: "예시 안내 게시물 제목입니다",
+    title: "예시 안내 게시물입니다",
     category: "COUNSELING",
     labels: [],
     authorEmail: adminEmail
   },
   {
-    title: "예시 자유게시판 게시물 제목입니다",
+    title: "예시 자유게시판 글입니다",
     category: "GREEN_BOARD",
     labels: [],
-    authorEmail: adminEmail
+    authorEmail: editorOneEmail
   },
   {
-    // 후기 게시물: editor-one 작성 + 프로그램 라벨 → 공개 사이트에서 후기로 분류됩니다.
-    title: "예시 후기 게시물 제목입니다",
+    // 후기 게시물: 운영자 1 작성 + GREEN_BOARD + 프로그램 라벨 → 공개 사이트에서 후기로 분류됩니다.
+    title: "예시 후기 게시물입니다",
     category: "GREEN_BOARD",
     labels: ["프로그램C"],
     authorEmail: editorOneEmail
   },
   {
-    title: "예시 자료실 게시물 제목입니다",
+    title: "예시 프로그램 A 자료입니다",
+    category: "RESOURCE",
+    labels: ["프로그램A"],
+    authorEmail: adminEmail,
+    relatedLinks: [{ title: "예시 자료 링크", url: "https://example.com/resource" }]
+  },
+  {
+    title: "예시 프로그램 C 자료입니다",
     category: "RESOURCE",
     labels: ["프로그램C"],
     authorEmail: adminEmail,

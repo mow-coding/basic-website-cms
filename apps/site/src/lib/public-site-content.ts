@@ -1,4 +1,6 @@
 import {
+  buildFallbackGeneralSchedules,
+  buildFallbackWorkshopRuns,
   notices as fallbackNotices,
   resources as fallbackResources,
   workshops as fallbackWorkshops,
@@ -245,7 +247,7 @@ function buildPublicSiteNoticeUrl(apiUrl: string, id: string) {
 
 function getFallbackContent(options: LoadPublicSiteContentOptions = {}) {
   const fallbackNoticeItems = fallbackNotices
-    .map((notice) => ({ ...notice, isWorkshopReview: false }))
+    .map((notice) => ({ ...notice, isWorkshopReview: getFallbackReviewFlag(notice) }))
     .filter((notice) => isFallbackNoticeIncluded(notice, options));
 
   return {
@@ -253,8 +255,8 @@ function getFallbackContent(options: LoadPublicSiteContentOptions = {}) {
     authors: getFallbackAuthors(),
     notices: fallbackNoticeItems,
     resources: fallbackResources,
-    generalSchedules: [] as PublicGeneralSchedule[],
-    workshopRuns: [] as PublicWorkshopRun[],
+    generalSchedules: buildFallbackGeneralSchedules() as PublicGeneralSchedule[],
+    workshopRuns: buildFallbackWorkshopRuns() as PublicWorkshopRun[],
     workshops: fallbackWorkshops.map((workshop) => ({
       ...workshop,
       applicationFormUrl: null,
@@ -293,7 +295,11 @@ function isFallbackNoticeIncluded(
 
 function getFallbackNotice(id: string) {
   const notice = fallbackNotices.find((item) => String(item.id) === id);
-  return notice ? { ...notice, isWorkshopReview: false } : null;
+  return notice ? { ...notice, isWorkshopReview: getFallbackReviewFlag(notice) } : null;
+}
+
+function getFallbackReviewFlag(notice: (typeof fallbackNotices)[number]) {
+  return "isWorkshopReview" in notice && notice.isWorkshopReview === true;
 }
 
 function normalizePublicApiContent(payload: PublicApiContent) {
