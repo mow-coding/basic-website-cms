@@ -257,6 +257,67 @@ const demoPosts = [
       "<p>무엇을 이야기하고 싶은지 미리 떠올려 보시면 상담이 한결 편해집니다.</p>" +
       "<p>부담 갖지 마시고 참고 자료로만 활용해 주세요.</p>",
     relatedLinks: [{ title: "상담 준비 체크리스트 (문서)", url: "https://example.com/resource" }]
+  },
+  {
+    title: "프로그램 A 겨울 기수 수강생을 모집합니다",
+    category: "GENERAL",
+    labels: ["프로그램A"],
+    authorEmail: adminEmail,
+    body:
+      "<p>새해를 여는 프로그램 A 겨울 기수 수강생을 모집합니다. 실무의 기초를 처음부터 함께 다집니다.</p>" +
+      "<p>겨울 기수는 2월에 두 차례 모임으로 진행되며, 신청은 1월 안에 받습니다.</p>" +
+      "<p>봄·가을 기수도 이어서 열리니, 일정이 맞는 기수를 캘린더에서 골라 신청해 주세요.</p>"
+  },
+  {
+    title: "겨울철 마음 돌봄 안내",
+    category: "COUNSELING",
+    labels: [],
+    authorEmail: adminEmail,
+    body:
+      "<p>해가 짧아지는 겨울에는 기분이 가라앉고 무기력해지기 쉽습니다.</p>" +
+      "<p>규칙적인 생활과 가벼운 산책, 햇빛을 쬐는 시간이 마음을 돌보는 데 도움이 됩니다.</p>" +
+      "<p>혼자 견디기 어려운 시기라면 편하게 상담을 예약해 주세요.</p>"
+  },
+  {
+    title: "프로그램 C 하반기 심화 기수 참여 안내",
+    category: "GENERAL",
+    labels: ["프로그램C"],
+    authorEmail: adminEmail,
+    body:
+      "<p>이론과 사례 실습을 여러 단계로 쌓아가는 프로그램 C 하반기 기수 참여자를 모집합니다.</p>" +
+      "<p>하반기 기수는 세 단계로 진행되어 상반기보다 다루는 사례의 폭이 넓습니다.</p>" +
+      "<p>각 단계 일정은 캘린더에서 미리 확인하고 순서대로 이수하시길 권합니다.</p>"
+  },
+  {
+    title: '"단계마다 성장했습니다" · 프로그램 C 하반기 수강 후기',
+    category: "GREEN_BOARD",
+    labels: ["프로그램C"],
+    authorEmail: editorOneEmail,
+    body:
+      "<p>프로그램 C 하반기 기수를 수강하신 분이 남겨 주신 후기를 동의를 얻어 옮겨 옵니다.</p>" +
+      "<p>\"단계가 올라갈수록 사례가 어려워졌지만, 앞 단계에서 익힌 틀이 있어 하나씩 짚어갈 수 있었어요. 마지막 단계에서는 제 관점을 스스로 설명할 수 있게 됐습니다.\"</p>" +
+      "<p>여러 단계로 이어지는 과정을 고민하시는 분들께 참고가 되길 바랍니다.</p>"
+  },
+  {
+    title: "가을 사례 발표회 참관을 안내합니다",
+    category: "COUNSELING",
+    labels: [],
+    authorEmail: adminEmail,
+    body:
+      "<p>한 해 동안 다룬 사례를 정리해 함께 나누는 가을 사례 발표회를 엽니다.</p>" +
+      "<p>발표는 참여자들이 맡고, 관심 있는 분은 누구나 방청하실 수 있습니다.</p>" +
+      "<p>참관을 원하시면 캘린더의 전체 일정에서 날짜를 확인해 미리 문의해 주세요.</p>"
+  },
+  {
+    title: "프로그램 D 사례 개념화 참고자료를 공유합니다",
+    category: "RESOURCE",
+    labels: ["프로그램D"],
+    authorEmail: adminEmail,
+    body:
+      "<p>프로그램 D에서 사례를 개념화할 때 참고하는 정리 자료를 공유합니다.</p>" +
+      "<p>가설을 세우고 근거를 정리하는 흐름을 예시와 함께 담았습니다.</p>" +
+      "<p>다음 단계 준비에 참고하실 수 있도록 아래 링크에서 내려받으세요.</p>",
+    relatedLinks: [{ title: "사례 개념화 참고자료 (문서)", url: "https://example.com/resource" }]
   }
 ];
 
@@ -319,7 +380,7 @@ async function seedPosts(usersByEmail) {
   return created;
 }
 
-// 일반 일정 템플릿: 매년 반복되는 6개의 계절 이벤트. site-data.ts의
+// 일반 일정 템플릿: 매년 반복되는 12개의 계절 이벤트(1~12월 매달). site-data.ts의
 // GENERAL_SCHEDULE_TEMPLATES와 반드시 동일해야 합니다(월/일/시/제목/설명 1:1).
 const generalScheduleTemplates = [
   {
@@ -339,6 +400,14 @@ const generalScheduleTemplates = [
     endHour: 13
   },
   {
+    title: "봄 프로그램 설명회",
+    description: "봄에 시작하는 교육 프로그램들의 구성과 신청 방법을 안내하는 설명회입니다.",
+    month: 3,
+    day: 7,
+    startHour: 14,
+    endHour: 16
+  },
+  {
     title: "봄 마음건강 공개 특강",
     description: "일반인을 위한 마음건강 주제의 공개 특강입니다. 사전 신청을 받습니다.",
     month: 4,
@@ -355,6 +424,22 @@ const generalScheduleTemplates = [
     endHour: 12
   },
   {
+    title: "상담사 집단 슈퍼비전",
+    description: "상담사들이 각자의 사례를 나누고 함께 점검하는 정기 집단 슈퍼비전입니다.",
+    month: 6,
+    day: 20,
+    startHour: 15,
+    endHour: 18
+  },
+  {
+    title: "여름 상담사 연수",
+    description: "상담사들의 역량을 다지는 여름 집중 연수입니다. 이론과 실습을 함께 진행합니다.",
+    month: 7,
+    day: 18,
+    startHour: 10,
+    endHour: 17
+  },
+  {
     title: "여름 정기 휴무 안내",
     description: "연구소 정기 휴무일입니다. 이날은 상담과 문의 응대가 어렵습니다.",
     month: 8,
@@ -363,12 +448,28 @@ const generalScheduleTemplates = [
     endHour: 18
   },
   {
+    title: "가을 마음건강 공개 특강",
+    description: "일반인을 위한 가을 공개 특강입니다. 계절 변화와 마음 돌봄을 주제로 합니다.",
+    month: 9,
+    day: 12,
+    startHour: 14,
+    endHour: 16
+  },
+  {
     title: "저녁 심리학 독서모임",
     description: "심리학 책 한 권을 함께 읽고 이야기 나누는 저녁 모임입니다.",
     month: 10,
     day: 22,
     startHour: 19,
     endHour: 21
+  },
+  {
+    title: "가을 사례 발표회",
+    description: "한 해 동안 다룬 사례를 정리해 함께 나누는 발표회입니다. 참여자 누구나 방청할 수 있습니다.",
+    month: 11,
+    day: 14,
+    startHour: 13,
+    endHour: 17
   },
   {
     title: "연말 결산 모임",
@@ -420,20 +521,20 @@ async function seedGeneralSchedules(usersByEmail) {
 // DEMO_YEARS의 각 연도에 대해 같은 월/일로 런을 생성합니다. runNumber는
 // (workshopSlug, year) 안에서 부여되며 @@unique(workshopSlug, year, runNumber)와 충돌하지 않습니다.
 const workshopRunTemplates = [
-  // 프로그램 A(입문): 봄(1기)·가을(2기) 각 1단계 2세션.
+  // ---- 프로그램 A(입문): 연 3기(겨울·봄·가을), 각 1단계 2세션. ----
   {
     workshopSlug: "program-a",
     runNumber: 1,
-    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 봄 기수입니다.</p>",
+    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 겨울 기수입니다.</p>",
     stages: [
       {
         stageName: "1단계",
         orderIndex: 0,
-        applicationStart: { month: 2, day: 10 },
-        applicationEnd: { month: 3, day: 6 },
+        applicationStart: { month: 1, day: 6 },
+        applicationEnd: { month: 1, day: 26 },
         sessions: [
-          { month: 3, day: 14, startTime: "10:00", endTime: "13:00" },
-          { month: 3, day: 21, startTime: "10:00", endTime: "13:00" }
+          { month: 2, day: 7, startTime: "10:00", endTime: "13:00" },
+          { month: 2, day: 14, startTime: "10:00", endTime: "13:00" }
         ]
       }
     ]
@@ -441,6 +542,23 @@ const workshopRunTemplates = [
   {
     workshopSlug: "program-a",
     runNumber: 2,
+    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 봄 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 4, day: 6 },
+        applicationEnd: { month: 4, day: 26 },
+        sessions: [
+          { month: 5, day: 8, startTime: "10:00", endTime: "13:00" },
+          { month: 5, day: 22, startTime: "10:00", endTime: "13:00" }
+        ]
+      }
+    ]
+  },
+  {
+    workshopSlug: "program-a",
+    runNumber: 3,
     description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 가을 기수입니다.</p>",
     stages: [
       {
@@ -455,11 +573,25 @@ const workshopRunTemplates = [
       }
     ]
   },
-  // 프로그램 B(단기 특강): 1기, 1단계 1세션.
+  // ---- 프로그램 B(단기 특강): 연 3기(봄·여름·가을), 각 1단계 1세션. ----
   {
     workshopSlug: "program-b",
     runNumber: 1,
-    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다.</p>",
+    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다. 봄 특강입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 2, day: 15 },
+        applicationEnd: { month: 3, day: 1 },
+        sessions: [{ month: 3, day: 21, startTime: "10:00", endTime: "17:00" }]
+      }
+    ]
+  },
+  {
+    workshopSlug: "program-b",
+    runNumber: 2,
+    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다. 여름 특강입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -470,39 +602,118 @@ const workshopRunTemplates = [
       }
     ]
   },
-  // 프로그램 C(단계별): 1기, 2단계 다세션(5월·7월).
   {
-    workshopSlug: "program-c",
-    runNumber: 1,
-    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다.</p>",
+    workshopSlug: "program-b",
+    runNumber: 3,
+    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다. 가을 특강입니다.</p>",
     stages: [
       {
         stageName: "1단계",
         orderIndex: 0,
+        applicationStart: { month: 9, day: 20 },
+        applicationEnd: { month: 10, day: 10 },
+        sessions: [{ month: 10, day: 17, startTime: "10:00", endTime: "17:00" }]
+      }
+    ]
+  },
+  // ---- 프로그램 C(단계별): 연 2기. 상반기 2단계, 하반기 3단계. ----
+  {
+    workshopSlug: "program-c",
+    runNumber: 1,
+    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다. 상반기 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 2, day: 10 },
+        applicationEnd: { month: 3, day: 2 },
+        sessions: [
+          { month: 3, day: 14, startTime: "10:00", endTime: "13:00" },
+          { month: 3, day: 28, startTime: "10:00", endTime: "13:00" }
+        ]
+      },
+      {
+        stageName: "2단계",
+        orderIndex: 1,
         applicationStart: { month: 4, day: 6 },
         applicationEnd: { month: 4, day: 26 },
         sessions: [
           { month: 5, day: 9, startTime: "10:00", endTime: "13:00" },
           { month: 5, day: 23, startTime: "10:00", endTime: "13:00" }
         ]
+      }
+    ]
+  },
+  {
+    workshopSlug: "program-c",
+    runNumber: 2,
+    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다. 하반기 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 8, day: 10 },
+        applicationEnd: { month: 8, day: 30 },
+        sessions: [
+          { month: 9, day: 5, startTime: "10:00", endTime: "13:00" },
+          { month: 9, day: 26, startTime: "10:00", endTime: "13:00" }
+        ]
       },
       {
         stageName: "2단계",
         orderIndex: 1,
-        applicationStart: { month: 6, day: 8 },
-        applicationEnd: { month: 6, day: 27 },
+        applicationStart: { month: 10, day: 5 },
+        applicationEnd: { month: 10, day: 25 },
         sessions: [
-          { month: 7, day: 11, startTime: "10:00", endTime: "13:00" },
-          { month: 7, day: 25, startTime: "10:00", endTime: "13:00" }
+          { month: 11, day: 7, startTime: "10:00", endTime: "13:00" },
+          { month: 11, day: 21, startTime: "10:00", endTime: "13:00" }
+        ]
+      },
+      {
+        stageName: "3단계",
+        orderIndex: 2,
+        applicationStart: { month: 11, day: 24 },
+        applicationEnd: { month: 12, day: 5 },
+        sessions: [
+          { month: 12, day: 12, startTime: "10:00", endTime: "13:00" },
+          { month: 12, day: 19, startTime: "10:00", endTime: "13:00" }
         ]
       }
     ]
   },
-  // 프로그램 D(고급): 1기, 3단계(6월·9월·11월).
+  // ---- 프로그램 D(고급): 연 2기, 각 3단계. ----
   {
     workshopSlug: "program-d",
     runNumber: 1,
-    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다.</p>",
+    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다. 상반기 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 1, day: 10 },
+        applicationEnd: { month: 1, day: 30 },
+        sessions: [{ month: 2, day: 21, startTime: "14:00", endTime: "17:00" }]
+      },
+      {
+        stageName: "2단계",
+        orderIndex: 1,
+        applicationStart: { month: 3, day: 10 },
+        applicationEnd: { month: 3, day: 30 },
+        sessions: [{ month: 4, day: 25, startTime: "14:00", endTime: "17:00" }]
+      },
+      {
+        stageName: "3단계",
+        orderIndex: 2,
+        applicationStart: { month: 6, day: 10 },
+        applicationEnd: { month: 6, day: 30 },
+        sessions: [{ month: 7, day: 26, startTime: "14:00", endTime: "17:00" }]
+      }
+    ]
+  },
+  {
+    workshopSlug: "program-d",
+    runNumber: 2,
+    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다. 하반기 기수입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -511,7 +722,7 @@ const workshopRunTemplates = [
         applicationEnd: { month: 6, day: 1 },
         sessions: [
           { month: 6, day: 13, startTime: "14:00", endTime: "17:00" },
-          { month: 6, day: 14, startTime: "14:00", endTime: "17:00" }
+          { month: 6, day: 27, startTime: "14:00", endTime: "17:00" }
         ]
       },
       {

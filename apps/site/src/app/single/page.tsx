@@ -32,8 +32,8 @@ export default function SingleDemoPage() {
   return (
     <>
       <section className="page-hero">
-        <h1>단일</h1>
-        <p className="hero-copy-nowrap">마음을 살피고, 함께 방향을 찾는 공간</p>
+        <h1>예시로 보여드리는 화면입니다</h1>
+        <p>여기 담긴 소개·연락처·오시는 길은 실제 정보가 아니라, 하나의 페이지가 어떻게 구성되는지 보여드리기 위해 꾸민 가상의 예시입니다.</p>
       </section>
 
       <section className="section service-section" id="site-overview">

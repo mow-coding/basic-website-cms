@@ -335,6 +335,51 @@ code {
   box-shadow: none;
 }
 
+.signin-demo-notice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+}
+
+.signin-demo-notice-title {
+  margin: 0;
+  color: #1f2d3a;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.signin-demo-notice-body {
+  margin: 0;
+  color: #4a5b6a;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.signin-demo-notice-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.signin-demo-notice-cancel {
+  align-self: center;
+  padding: 0.35rem 0.6rem;
+  color: #5f6b77;
+  font: inherit;
+  font-size: 0.85rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.signin-demo-notice-cancel:hover:not(:disabled) {
+  color: #2a5f7f;
+  text-decoration: underline;
+}
+
 .google-signin-button:active:not(:disabled) {
   background: #f1f3f4;
 }

@@ -24,7 +24,7 @@ export const siteConfig = {
   address: "서울특별시 동대문구 서울시립대로 160 3층",
   description:
     "모오 임상심리연구소는 심리상담과 심리평가, 임상심리 전문가 교육 프로그램을 운영하는 전문기관입니다.",
-  heroCopy: ["혼자 감당해온 마음의 무게가 있다면", "이제 전문가와 함께 살펴볼 때입니다"],
+  heroCopy: ["안전하고, 진실되고,", "지속가능하게 만듭니다"],
   colors: {
     blue: "#4E73AA",
     deepBlue: "#2A5F7F",
@@ -551,6 +551,109 @@ export const notices = [
     relatedLinks: [{ title: "상담 준비 체크리스트 (문서)", url: "https://example.com/resource" }],
     attachments: [] as Array<{ title: string; url: string }>,
   },
+  {
+    id: 125,
+    title: "프로그램 A 겨울 기수 수강생을 모집합니다",
+    category: "전체 공지" as NoticeCategory,
+    labels: ["프로그램A"] as NoticeLabel[],
+    author: "관리자",
+    createdAt: "2026.01.09 10:00",
+    updatedAt: "-",
+    official: true,
+    body: [
+      "새해를 여는 프로그램 A 겨울 기수 수강생을 모집합니다. 실무의 기초를 처음부터 함께 다집니다.",
+      "겨울 기수는 2월에 두 차례 모임으로 진행되며, 신청은 1월 안에 받습니다.",
+      "봄·가을 기수도 이어서 열리니, 일정이 맞는 기수를 캘린더에서 골라 신청해 주세요.",
+    ],
+    relatedLinks: [] as Array<{ title: string; url: string }>,
+    attachments: [] as Array<{ title: string; url: string }>,
+  },
+  {
+    id: 126,
+    title: "겨울철 마음 돌봄 안내",
+    category: "안내" as NoticeCategory,
+    labels: [] as NoticeLabel[],
+    author: "관리자",
+    createdAt: "2026.12.18 14:00",
+    updatedAt: "-",
+    official: true,
+    body: [
+      "해가 짧아지는 겨울에는 기분이 가라앉고 무기력해지기 쉽습니다.",
+      "규칙적인 생활과 가벼운 산책, 햇빛을 쬐는 시간이 마음을 돌보는 데 도움이 됩니다.",
+      "혼자 견디기 어려운 시기라면 편하게 상담을 예약해 주세요.",
+    ],
+    relatedLinks: [] as Array<{ title: string; url: string }>,
+    attachments: [] as Array<{ title: string; url: string }>,
+  },
+  {
+    id: 127,
+    title: "프로그램 C 하반기 심화 기수 참여 안내",
+    category: "전체 공지" as NoticeCategory,
+    labels: ["프로그램C"] as NoticeLabel[],
+    author: "관리자",
+    createdAt: "2026.08.05 10:00",
+    updatedAt: "-",
+    official: true,
+    body: [
+      "이론과 사례 실습을 여러 단계로 쌓아가는 프로그램 C 하반기 기수 참여자를 모집합니다.",
+      "하반기 기수는 세 단계로 진행되어 상반기보다 다루는 사례의 폭이 넓습니다.",
+      "각 단계 일정은 캘린더에서 미리 확인하고 순서대로 이수하시길 권합니다.",
+    ],
+    relatedLinks: [] as Array<{ title: string; url: string }>,
+    attachments: [] as Array<{ title: string; url: string }>,
+  },
+  {
+    id: 128,
+    title: "\"단계마다 성장했습니다\" · 프로그램 C 하반기 수강 후기",
+    category: "자유게시판" as NoticeCategory,
+    labels: ["프로그램C"] as NoticeLabel[],
+    author: "운영자 1",
+    createdAt: "2026.09.28 16:40",
+    updatedAt: "-",
+    official: false,
+    isWorkshopReview: true,
+    body: [
+      "프로그램 C 하반기 기수를 수강하신 분이 남겨 주신 후기를 동의를 얻어 옮겨 옵니다.",
+      "\"단계가 올라갈수록 사례가 어려워졌지만, 앞 단계에서 익힌 틀이 있어 하나씩 짚어갈 수 있었어요. 마지막 단계에서는 제 관점을 스스로 설명할 수 있게 됐습니다.\"",
+      "여러 단계로 이어지는 과정을 고민하시는 분들께 참고가 되길 바랍니다.",
+    ],
+    relatedLinks: [] as Array<{ title: string; url: string }>,
+    attachments: [] as Array<{ title: string; url: string }>,
+  },
+  {
+    id: 129,
+    title: "가을 사례 발표회 참관을 안내합니다",
+    category: "안내" as NoticeCategory,
+    labels: [] as NoticeLabel[],
+    author: "관리자",
+    createdAt: "2026.11.02 13:00",
+    updatedAt: "-",
+    official: true,
+    body: [
+      "한 해 동안 다룬 사례를 정리해 함께 나누는 가을 사례 발표회를 엽니다.",
+      "발표는 참여자들이 맡고, 관심 있는 분은 누구나 방청하실 수 있습니다.",
+      "참관을 원하시면 캘린더의 전체 일정에서 날짜를 확인해 미리 문의해 주세요.",
+    ],
+    relatedLinks: [] as Array<{ title: string; url: string }>,
+    attachments: [] as Array<{ title: string; url: string }>,
+  },
+  {
+    id: 130,
+    title: "프로그램 D 사례 개념화 참고자료를 공유합니다",
+    category: "자료실" as NoticeCategory,
+    labels: ["프로그램D"] as NoticeLabel[],
+    author: "관리자",
+    createdAt: "2026.09.22 18:00",
+    updatedAt: "-",
+    official: true,
+    body: [
+      "프로그램 D에서 사례를 개념화할 때 참고하는 정리 자료를 공유합니다.",
+      "가설을 세우고 근거를 정리하는 흐름을 예시와 함께 담았습니다.",
+      "다음 단계 준비에 참고하실 수 있도록 아래 링크에서 내려받으세요.",
+    ],
+    relatedLinks: [{ title: "사례 개념화 참고자료 (문서)", url: "https://example.com/resource" }],
+    attachments: [] as Array<{ title: string; url: string }>,
+  },
 ];
 
 // 캐노니컬 자료실 게시물(RESOURCE + 프로그램/자료실/상담 라벨). 어드민 시드와 동일 세계.
@@ -600,6 +703,17 @@ export const resources = [
     createdAt: "2026.06.14 18:00",
     updatedAt: "-",
   },
+  {
+    id: 205,
+    workshop: "program-d" as WorkshopSlug,
+    session: "제2회 프로그램 D",
+    title: "프로그램 D 사례 개념화 참고자료를 공유합니다",
+    description: "프로그램 D에서 사례를 개념화할 때 참고하는 정리 자료를 공유합니다.",
+    url: "https://example.com/resource",
+    author: "관리자",
+    createdAt: "2026.09.22 18:00",
+    updatedAt: "-",
+  },
 ];
 
 export const researchSurveyHref = "https://github.com/mow-coding/basic-website-cms";
@@ -630,9 +744,8 @@ function seoulFixedIso(year: number, month: number, day: number, hour = 0, minut
 }
 
 // ---------------------------------------------------------------------------
-// 일반 일정 템플릿: 매년 반복되는 6개의 계절 이벤트. 여러 달에 분산됩니다.
-// (2월 오리엔테이션 · 4월 봄 공개특강 · 5월 사례 세미나 · 8월 여름 휴무 ·
-//  10월 저녁 독서모임 · 12월 연말 결산)
+// 일반 일정 템플릿: 매년 반복되는 12개의 계절 이벤트. 1월부터 12월까지 매달 하나 이상이
+// 배치되어, 어느 달을 방문해도 전체 일정에 볼거리가 있습니다.
 type GeneralScheduleTemplate = {
   key: string;
   title: string;
@@ -663,6 +776,15 @@ export const GENERAL_SCHEDULE_TEMPLATES: GeneralScheduleTemplate[] = [
     endHour: 13,
   },
   {
+    key: "spring-info-session",
+    title: "봄 프로그램 설명회",
+    description: "봄에 시작하는 교육 프로그램들의 구성과 신청 방법을 안내하는 설명회입니다.",
+    month: 3,
+    day: 7,
+    startHour: 14,
+    endHour: 16,
+  },
+  {
     key: "spring-lecture",
     title: "봄 마음건강 공개 특강",
     description: "일반인을 위한 마음건강 주제의 공개 특강입니다. 사전 신청을 받습니다.",
@@ -681,6 +803,24 @@ export const GENERAL_SCHEDULE_TEMPLATES: GeneralScheduleTemplate[] = [
     endHour: 12,
   },
   {
+    key: "group-supervision",
+    title: "상담사 집단 슈퍼비전",
+    description: "상담사들이 각자의 사례를 나누고 함께 점검하는 정기 집단 슈퍼비전입니다.",
+    month: 6,
+    day: 20,
+    startHour: 15,
+    endHour: 18,
+  },
+  {
+    key: "summer-training",
+    title: "여름 상담사 연수",
+    description: "상담사들의 역량을 다지는 여름 집중 연수입니다. 이론과 실습을 함께 진행합니다.",
+    month: 7,
+    day: 18,
+    startHour: 10,
+    endHour: 17,
+  },
+  {
     key: "summer-closure",
     title: "여름 정기 휴무 안내",
     description: "연구소 정기 휴무일입니다. 이날은 상담과 문의 응대가 어렵습니다.",
@@ -690,6 +830,15 @@ export const GENERAL_SCHEDULE_TEMPLATES: GeneralScheduleTemplate[] = [
     endHour: 18,
   },
   {
+    key: "autumn-lecture",
+    title: "가을 마음건강 공개 특강",
+    description: "일반인을 위한 가을 공개 특강입니다. 계절 변화와 마음 돌봄을 주제로 합니다.",
+    month: 9,
+    day: 12,
+    startHour: 14,
+    endHour: 16,
+  },
+  {
     key: "reading-club",
     title: "저녁 심리학 독서모임",
     description: "심리학 책 한 권을 함께 읽고 이야기 나누는 저녁 모임입니다.",
@@ -697,6 +846,15 @@ export const GENERAL_SCHEDULE_TEMPLATES: GeneralScheduleTemplate[] = [
     day: 22,
     startHour: 19,
     endHour: 21,
+  },
+  {
+    key: "case-presentation",
+    title: "가을 사례 발표회",
+    description: "한 해 동안 다룬 사례를 정리해 함께 나누는 발표회입니다. 참여자 누구나 방청할 수 있습니다.",
+    month: 11,
+    day: 14,
+    startHour: 13,
+    endHour: 17,
   },
   {
     key: "year-end",
@@ -760,20 +918,20 @@ type WorkshopRunTemplate = {
 };
 
 export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
-  // 프로그램 A(입문): 봄(1기)·가을(2기) 각 1단계 2세션.
+  // ---- 프로그램 A(입문): 연 3기(겨울·봄·가을), 각 1단계 2세션. ----
   {
     workshopSlug: "program-a",
     runNumber: 1,
-    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 봄 기수입니다.</p>",
+    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 겨울 기수입니다.</p>",
     stages: [
       {
         stageName: "1단계",
         orderIndex: 0,
-        applicationStart: { month: 2, day: 10 },
-        applicationEnd: { month: 3, day: 6 },
+        applicationStart: { month: 1, day: 6 },
+        applicationEnd: { month: 1, day: 26 },
         sessions: [
-          { month: 3, day: 14, startTime: "10:00", endTime: "13:00" },
-          { month: 3, day: 21, startTime: "10:00", endTime: "13:00" },
+          { month: 2, day: 7, startTime: "10:00", endTime: "13:00" },
+          { month: 2, day: 14, startTime: "10:00", endTime: "13:00" },
         ],
       },
     ],
@@ -781,6 +939,23 @@ export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
   {
     workshopSlug: "program-a",
     runNumber: 2,
+    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 봄 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 4, day: 6 },
+        applicationEnd: { month: 4, day: 26 },
+        sessions: [
+          { month: 5, day: 8, startTime: "10:00", endTime: "13:00" },
+          { month: 5, day: 22, startTime: "10:00", endTime: "13:00" },
+        ],
+      },
+    ],
+  },
+  {
+    workshopSlug: "program-a",
+    runNumber: 3,
     description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다. 가을 기수입니다.</p>",
     stages: [
       {
@@ -795,11 +970,25 @@ export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
       },
     ],
   },
-  // 프로그램 B(단기 특강): 1기, 1단계 1세션.
+  // ---- 프로그램 B(단기 특강): 연 3기(봄·여름·가을), 각 1단계 1세션. ----
   {
     workshopSlug: "program-b",
     runNumber: 1,
-    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다.</p>",
+    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다. 봄 특강입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 2, day: 15 },
+        applicationEnd: { month: 3, day: 1 },
+        sessions: [{ month: 3, day: 21, startTime: "10:00", endTime: "17:00" }],
+      },
+    ],
+  },
+  {
+    workshopSlug: "program-b",
+    runNumber: 2,
+    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다. 여름 특강입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -810,15 +999,39 @@ export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
       },
     ],
   },
-  // 프로그램 C(단계별): 1기, 2단계 다세션(5월·7월).
   {
-    workshopSlug: "program-c",
-    runNumber: 1,
-    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다.</p>",
+    workshopSlug: "program-b",
+    runNumber: 3,
+    description: "<p>핵심만 짧게 집중해서 다루는 단기 특강 과정입니다. 가을 특강입니다.</p>",
     stages: [
       {
         stageName: "1단계",
         orderIndex: 0,
+        applicationStart: { month: 9, day: 20 },
+        applicationEnd: { month: 10, day: 10 },
+        sessions: [{ month: 10, day: 17, startTime: "10:00", endTime: "17:00" }],
+      },
+    ],
+  },
+  // ---- 프로그램 C(단계별): 연 2기. 상반기 2단계, 하반기 3단계. ----
+  {
+    workshopSlug: "program-c",
+    runNumber: 1,
+    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다. 상반기 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 2, day: 10 },
+        applicationEnd: { month: 3, day: 2 },
+        sessions: [
+          { month: 3, day: 14, startTime: "10:00", endTime: "13:00" },
+          { month: 3, day: 28, startTime: "10:00", endTime: "13:00" },
+        ],
+      },
+      {
+        stageName: "2단계",
+        orderIndex: 1,
         applicationStart: { month: 4, day: 6 },
         applicationEnd: { month: 4, day: 26 },
         sessions: [
@@ -826,23 +1039,78 @@ export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
           { month: 5, day: 23, startTime: "10:00", endTime: "13:00" },
         ],
       },
+    ],
+  },
+  {
+    workshopSlug: "program-c",
+    runNumber: 2,
+    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다. 하반기 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 8, day: 10 },
+        applicationEnd: { month: 8, day: 30 },
+        sessions: [
+          { month: 9, day: 5, startTime: "10:00", endTime: "13:00" },
+          { month: 9, day: 26, startTime: "10:00", endTime: "13:00" },
+        ],
+      },
       {
         stageName: "2단계",
         orderIndex: 1,
-        applicationStart: { month: 6, day: 8 },
-        applicationEnd: { month: 6, day: 27 },
+        applicationStart: { month: 10, day: 5 },
+        applicationEnd: { month: 10, day: 25 },
         sessions: [
-          { month: 7, day: 11, startTime: "10:00", endTime: "13:00" },
-          { month: 7, day: 25, startTime: "10:00", endTime: "13:00" },
+          { month: 11, day: 7, startTime: "10:00", endTime: "13:00" },
+          { month: 11, day: 21, startTime: "10:00", endTime: "13:00" },
+        ],
+      },
+      {
+        stageName: "3단계",
+        orderIndex: 2,
+        applicationStart: { month: 11, day: 24 },
+        applicationEnd: { month: 12, day: 5 },
+        sessions: [
+          { month: 12, day: 12, startTime: "10:00", endTime: "13:00" },
+          { month: 12, day: 19, startTime: "10:00", endTime: "13:00" },
         ],
       },
     ],
   },
-  // 프로그램 D(고급): 1기, 3단계(6월·9월·11월).
+  // ---- 프로그램 D(고급): 연 2기, 각 3단계. ----
   {
     workshopSlug: "program-d",
     runNumber: 1,
-    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다.</p>",
+    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다. 상반기 기수입니다.</p>",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStart: { month: 1, day: 10 },
+        applicationEnd: { month: 1, day: 30 },
+        sessions: [{ month: 2, day: 21, startTime: "14:00", endTime: "17:00" }],
+      },
+      {
+        stageName: "2단계",
+        orderIndex: 1,
+        applicationStart: { month: 3, day: 10 },
+        applicationEnd: { month: 3, day: 30 },
+        sessions: [{ month: 4, day: 25, startTime: "14:00", endTime: "17:00" }],
+      },
+      {
+        stageName: "3단계",
+        orderIndex: 2,
+        applicationStart: { month: 6, day: 10 },
+        applicationEnd: { month: 6, day: 30 },
+        sessions: [{ month: 7, day: 26, startTime: "14:00", endTime: "17:00" }],
+      },
+    ],
+  },
+  {
+    workshopSlug: "program-d",
+    runNumber: 2,
+    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다. 하반기 기수입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -851,7 +1119,7 @@ export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
         applicationEnd: { month: 6, day: 1 },
         sessions: [
           { month: 6, day: 13, startTime: "14:00", endTime: "17:00" },
-          { month: 6, day: 14, startTime: "14:00", endTime: "17:00" },
+          { month: 6, day: 27, startTime: "14:00", endTime: "17:00" },
         ],
       },
       {
