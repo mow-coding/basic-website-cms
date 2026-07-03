@@ -254,4 +254,4 @@ export const resources = [
   },
 ];
 
-export const researchSurveyHref = "https://example.com";
+export const researchSurveyHref = "https://github.com/mow-coding/basic-website-cms";
