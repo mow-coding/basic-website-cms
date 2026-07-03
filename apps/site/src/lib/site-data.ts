@@ -21,8 +21,8 @@ export const siteConfig = {
   domain: normalizeSiteDomain(process.env.NEXT_PUBLIC_SITE_URL),
   email: "admin@example.com",
   description:
-    "모오 임상심리연구소는 전문적인 심리치료와 심리검사, 임상심리 전문가 교육 워크숍을 제공합니다",
-  heroCopy: ["저희는 여러분의 잠재된 힘에 대해 잘 알고 있으며", "그 힘이 발휘되도록 길을 안내할 뿐입니다"],
+    "모오 임상심리연구소의 공개 웹사이트 데모입니다. 실제 소개 문구는 운영 환경에서 작성합니다.",
+  heroCopy: ["여기에 방문자에게 건네는 첫 번째 문장이 들어갑니다", "여기에 기관의 지향을 담은 두 번째 문장이 들어갑니다"],
   colors: {
     blue: "#4E73AA",
     deepBlue: "#2A5F7F",

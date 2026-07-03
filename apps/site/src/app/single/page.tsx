@@ -22,21 +22,21 @@ export default function SingleDemoPage() {
     <>
       <section className="page-hero">
         <h1>단일</h1>
-        <p className="hero-copy-nowrap">전문적 심리치료 및 심리검사 서비스</p>
+        <p className="hero-copy-nowrap">여기에 페이지를 소개하는 문구가 들어갑니다</p>
       </section>
 
       <section className="section service-section" id="site-overview">
         <article className="service-panel">
           <div>
-            <h3>전문적인 심리평가와 상담을 바탕으로 지금 필요한 도움을 차분히 찾아갑니다.</h3>
-            <p>모오 임상심리연구소의 심리치료와 심리검사 서비스를 안내합니다</p>
+            <h3>여기에 첫 번째 서비스를 소개하는 제목이 들어갑니다</h3>
+            <p>여기에 첫 번째 서비스의 설명 문구가 들어갑니다. 실제 문구는 운영 환경에서 작성합니다.</p>
           </div>
-          <Link href="/#site-notices">심리상담 안내</Link>
+          <Link href="/#site-notices">자세히 보기</Link>
         </article>
         <article className="service-panel service-workshop">
           <div>
-            <h3>전문가 교육의 시간을 꾸준하고 깊이 있게 만들어갑니다</h3>
-            <p>오랜 시간 동안 쌓아온 전문성을 바탕으로 임상 현장에 필요한 노하우를 제공합니다.</p>
+            <h3>여기에 두 번째 서비스를 소개하는 제목이 들어갑니다</h3>
+            <p>여기에 두 번째 서비스의 설명 문구가 들어갑니다. 실제 문구는 운영 환경에서 작성합니다.</p>
           </div>
           <Link href="/nested">프로그램 살펴보기</Link>
         </article>
@@ -53,7 +53,7 @@ export default function SingleDemoPage() {
               <br />
               실제 소개 문구는 운영 환경에서 작성합니다.
             </p>
-            <p>상담진 약력에 대한 사항은 전화 예약 시에 자세히 안내해드리겠습니다.</p>
+            <p>여기에 추가 안내 문구가 들어갑니다. 실제 문구는 운영 환경에서 작성합니다.</p>
             <dl className="counselor-contact-list">
               <div>
                 <dt>예약 문의</dt>
@@ -61,7 +61,7 @@ export default function SingleDemoPage() {
               </div>
               <div>
                 <dt>문의 가능 시간</dt>
-                <dd>월 ~ 토 · 10:00 ~ 18:00</dd>
+                <dd>여기에 문의 가능 시간이 들어갑니다</dd>
               </div>
             </dl>
           </div>

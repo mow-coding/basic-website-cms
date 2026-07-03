@@ -101,80 +101,162 @@ async function seedPosts(usersByEmail) {
   return created;
 }
 
-async function seedGeneralSchedule(usersByEmail) {
-  const title = "예시 기본 일정입니다";
-  const existing = await prisma.generalSchedule.findFirst({ where: { title } });
-  if (existing) {
-    return 0;
-  }
+const demoGeneralSchedules = [
+  { title: "예시 기본 일정입니다", day: 14, startHour: 10, endHour: 12 },
+  { title: "예시 휴무 안내 일정입니다", day: 3, startHour: 10, endHour: 18 },
+  { title: "예시 내부 세미나 일정입니다", day: 8, startHour: 14, endHour: 17 },
+  { title: "예시 정기 모임 일정입니다", day: 22, startHour: 19, endHour: 21 },
+  { title: "예시 특별 행사 일정입니다", day: 40, startHour: 10, endHour: 16 }
+];
 
-  await prisma.generalSchedule.create({
-    data: {
-      authorUserId: usersByEmail.get(adminEmail)?.id ?? null,
-      title,
-      description: "예시 일정 설명입니다. 실제 일정은 관리자에서 등록합니다.",
-      date: futureDate(14, 10, 0),
-      endsAt: futureDate(14, 12, 0),
-      visibility: "PUBLIC"
+async function seedGeneralSchedules(usersByEmail) {
+  let created = 0;
+
+  for (const schedule of demoGeneralSchedules) {
+    const existing = await prisma.generalSchedule.findFirst({ where: { title: schedule.title } });
+    if (existing) {
+      continue;
     }
-  });
 
-  return 1;
-}
-
-async function seedWorkshopRun(usersByEmail) {
-  const workshopSlug = "program-c";
-  const year = futureDate(30).getFullYear();
-  const runNumber = 1;
-
-  const run = await prisma.workshopRun.upsert({
-    where: { workshopSlug_year_runNumber: { workshopSlug, year, runNumber } },
-    create: {
-      authorUserId: usersByEmail.get(adminEmail)?.id ?? null,
-      workshopSlug,
-      year,
-      runNumber,
-      applicationFormUrl: "https://example.com",
-      description: "<p>예시 프로그램 런 설명입니다.</p>",
-      visibility: "PUBLIC"
-    },
-    update: {}
-  });
-
-  const existingStageCount = await prisma.scheduleStage.count({ where: { workshopRunId: run.id } });
-  if (existingStageCount > 0) {
-    return 0;
-  }
-
-  const stages = [
-    { stageName: "1단계", orderIndex: 0, sessionDay: 30 },
-    { stageName: "2단계", orderIndex: 1, sessionDay: 44 }
-  ];
-
-  for (const stage of stages) {
-    await prisma.scheduleStage.create({
+    await prisma.generalSchedule.create({
       data: {
-        workshopRunId: run.id,
-        stageName: stage.stageName,
-        orderIndex: stage.orderIndex,
-        applicationStartsAt: futureDate(stage.sessionDay - 21, 9, 0),
-        applicationEndsAt: futureDate(stage.sessionDay - 3, 18, 0),
-        applicationFormUrl: "https://example.com",
-        sessions: {
-          create: [
-            {
-              dayIndex: 0,
-              sessionDate: futureDate(stage.sessionDay, 10, 0),
-              startTime: "10:00",
-              endTime: "13:00"
-            }
-          ]
-        }
+        authorUserId: usersByEmail.get(adminEmail)?.id ?? null,
+        title: schedule.title,
+        description: "예시 일정 설명입니다. 실제 일정은 관리자에서 등록합니다.",
+        date: futureDate(schedule.day, schedule.startHour, 0),
+        endsAt: futureDate(schedule.day, schedule.endHour, 0),
+        visibility: "PUBLIC"
       }
     });
+    created += 1;
   }
 
-  return stages.length;
+  return created;
+}
+
+const demoWorkshopRuns = [
+  {
+    // 프로그램 A: 신청 기간이 현재 진행 중인 단일 단계 런
+    workshopSlug: "program-a",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStartDay: -3,
+        applicationEndDay: 8,
+        sessions: [
+          { day: 12, startTime: "10:00", endTime: "13:00" },
+          { day: 13, startTime: "10:00", endTime: "13:00" }
+        ]
+      }
+    ]
+  },
+  {
+    // 프로그램 C: 두 단계 런
+    workshopSlug: "program-c",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStartDay: 9,
+        applicationEndDay: 27,
+        sessions: [{ day: 30, startTime: "10:00", endTime: "13:00" }]
+      },
+      {
+        stageName: "2단계",
+        orderIndex: 1,
+        applicationStartDay: 23,
+        applicationEndDay: 41,
+        sessions: [{ day: 44, startTime: "10:00", endTime: "13:00" }]
+      }
+    ]
+  },
+  {
+    // 프로그램 D: 세 단계 런 (여러 달에 걸친 세션)
+    workshopSlug: "program-d",
+    stages: [
+      {
+        stageName: "1단계",
+        orderIndex: 0,
+        applicationStartDay: 4,
+        applicationEndDay: 22,
+        sessions: [
+          { day: 25, startTime: "14:00", endTime: "17:00" },
+          { day: 26, startTime: "14:00", endTime: "17:00" }
+        ]
+      },
+      {
+        stageName: "2단계",
+        orderIndex: 1,
+        applicationStartDay: 25,
+        applicationEndDay: 43,
+        sessions: [{ day: 46, startTime: "14:00", endTime: "17:00" }]
+      },
+      {
+        stageName: "3단계",
+        orderIndex: 2,
+        applicationStartDay: 39,
+        applicationEndDay: 57,
+        sessions: [{ day: 60, startTime: "14:00", endTime: "17:00" }]
+      }
+    ]
+  }
+];
+
+async function seedWorkshopRuns(usersByEmail) {
+  let createdStages = 0;
+
+  for (const runConfig of demoWorkshopRuns) {
+    const year = futureDate(30).getFullYear();
+    const runNumber = 1;
+
+    const run = await prisma.workshopRun.upsert({
+      where: {
+        workshopSlug_year_runNumber: { workshopSlug: runConfig.workshopSlug, year, runNumber }
+      },
+      create: {
+        authorUserId: usersByEmail.get(adminEmail)?.id ?? null,
+        workshopSlug: runConfig.workshopSlug,
+        year,
+        runNumber,
+        applicationFormUrl: "https://example.com",
+        description: "<p>예시 프로그램 런 설명입니다.</p>",
+        visibility: "PUBLIC"
+      },
+      update: {}
+    });
+
+    const existingStageCount = await prisma.scheduleStage.count({
+      where: { workshopRunId: run.id }
+    });
+    if (existingStageCount > 0) {
+      continue;
+    }
+
+    for (const stage of runConfig.stages) {
+      await prisma.scheduleStage.create({
+        data: {
+          workshopRunId: run.id,
+          stageName: stage.stageName,
+          orderIndex: stage.orderIndex,
+          applicationStartsAt: futureDate(stage.applicationStartDay, 9, 0),
+          applicationEndsAt: futureDate(stage.applicationEndDay, 18, 0),
+          applicationFormUrl: "https://example.com",
+          sessions: {
+            create: stage.sessions.map((session, index) => ({
+              dayIndex: index,
+              sessionDate: futureDate(session.day, 0, 0),
+              startTime: session.startTime,
+              endTime: session.endTime
+            }))
+          }
+        }
+      });
+      createdStages += 1;
+    }
+  }
+
+  return createdStages;
 }
 
 async function main() {
@@ -183,8 +265,8 @@ async function main() {
   usersByEmail.set(editorOneEmail, await upsertUser(editorOneEmail, "운영자 1"));
 
   const createdPosts = await seedPosts(usersByEmail);
-  const createdSchedules = await seedGeneralSchedule(usersByEmail);
-  const createdStages = await seedWorkshopRun(usersByEmail);
+  const createdSchedules = await seedGeneralSchedules(usersByEmail);
+  const createdStages = await seedWorkshopRuns(usersByEmail);
 
   console.log(
     `Seeded demo content: ${createdPosts} posts, ${createdSchedules} general schedules, ${createdStages} workshop stages (existing items were kept).`
