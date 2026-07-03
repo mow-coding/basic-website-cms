@@ -200,8 +200,9 @@ export const notices = [
   },
   {
     id: 105,
-    // 후기: 운영자 1 + GREEN_BOARD + 프로그램C 라벨 → 후기/리뷰 탭에 노출됩니다.
-    title: "프로그램 C를 마치며 남기는 기록",
+    // 후기: 운영자가 외부에 공유된 수강 후기를 모아 옮겨 오는 카테고리입니다.
+    // 운영자 1 + GREEN_BOARD + 프로그램C 라벨 → 후기/리뷰 탭에 노출됩니다.
+    title: "\"사례를 보는 눈이 트였습니다\" · 프로그램 C 수강 후기",
     category: "자유게시판" as NoticeCategory,
     labels: ["프로그램C"] as NoticeLabel[],
     author: "운영자 1",
@@ -210,9 +211,9 @@ export const notices = [
     official: false,
     isWorkshopReview: true,
     body: [
-      "여러 단계를 함께한 프로그램 C가 이번 주로 마무리되었습니다.",
-      "매주 사례를 나누며 서로의 시선을 배우는 시간이었습니다.",
-      "참여해 주신 모든 분께 감사드리며, 다음 기수에서 다시 뵙기를 바랍니다.",
+      "프로그램 C를 수강하신 분이 개인 블로그에 남겨 주신 후기를 동의를 얻어 옮겨 옵니다.",
+      "\"매주 다른 사례를 함께 뜯어보며 제 시야가 얼마나 좁았는지 알게 됐습니다. 혼자 공부할 때 놓쳤던 부분을 동료들의 질문으로 채울 수 있었어요.\"",
+      "이렇게 외부에 공유해 주신 수강 후기를 한곳에 모아 소개합니다.",
     ],
     relatedLinks: [] as Array<{ title: string; url: string }>,
     attachments: [] as Array<{ title: string; url: string }>,
