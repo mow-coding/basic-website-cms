@@ -7,6 +7,14 @@ describe("resolveUploadPolicy", () => {
 
     expect(policy.maximumSizeInBytes).toBe(30 * 1024 * 1024);
     expect(policy.allowedContentTypes).toContain("application/pdf");
+    expect(policy.allowedContentTypes).not.toContain("application/octet-stream");
+  });
+
+  it("keeps the octet-stream fallback only for HWP attachments", () => {
+    const policy = resolveUploadPolicy("site-attachments/application.hwp");
+
+    expect(policy.allowedContentTypes).toContain("application/vnd.hancom.hwp");
+    expect(policy.allowedContentTypes).toContain("application/octet-stream");
   });
 
   it("allows supported body images", () => {

@@ -3,8 +3,7 @@ const maxBodyImageSizeBytes = 10 * 1024 * 1024;
 const attachmentExtensions = new Set(["pdf", "hwp", "hwpx", "doc", "docx", "xls", "xlsx", "ppt", "pptx"]);
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif"]);
 
-const attachmentContentTypes = [
-  "application/pdf",
+const hwpContentTypes = [
   "application/haansofthwp",
   "application/haansoft-hwp",
   "application/haansofthwpx",
@@ -13,14 +12,21 @@ const attachmentContentTypes = [
   "application/x-hwpx",
   "application/vnd.hancom.hwp",
   "application/vnd.hancom.hwpx",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "application/vnd.ms-excel",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "application/vnd.ms-powerpoint",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   "application/octet-stream"
 ];
+
+// 확장자별로 허용 content-type을 제한해, 예컨대 .pdf 업로드에는 application/pdf만 통과시킵니다.
+const attachmentContentTypesByExtension: Record<string, string[]> = {
+  doc: ["application/msword"],
+  docx: ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+  hwp: hwpContentTypes,
+  hwpx: hwpContentTypes,
+  pdf: ["application/pdf"],
+  ppt: ["application/vnd.ms-powerpoint"],
+  pptx: ["application/vnd.openxmlformats-officedocument.presentationml.presentation"],
+  xls: ["application/vnd.ms-excel"],
+  xlsx: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+};
 
 const imageContentTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -41,7 +47,7 @@ export function resolveUploadPolicy(pathname: string): SiteAdminUploadPolicy {
 
   if (pathname.startsWith("site-attachments/") && extension && attachmentExtensions.has(extension)) {
     return {
-      allowedContentTypes: attachmentContentTypes,
+      allowedContentTypes: attachmentContentTypesByExtension[extension] ?? [],
       maximumSizeInBytes: maxAttachmentSizeBytes
     };
   }

@@ -648,6 +648,18 @@ main {
   backdrop-filter: blur(4px);
 }
 
+.service-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-self: end;
+  justify-content: flex-end;
+}
+
+.service-panel-actions a {
+  justify-self: auto;
+}
+
 .service-panel a:hover,
 .text-link:hover {
   transform: translateX(2px);

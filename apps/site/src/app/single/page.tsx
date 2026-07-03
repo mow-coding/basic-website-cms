@@ -9,6 +9,12 @@ export const metadata = {
 const mapQuery = encodeURIComponent(siteConfig.address);
 const googleMapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
 
+// 문의 버튼이 여는 외부 신청/문의 양식(예: Google Forms). 실제 양식 주소로 교체해 쓰세요.
+const counselingInquiryFormUrl =
+  "https://docs.google.com/forms/d/e/1FAIpQLSd1oW8l6m-dtPDWonRhr4i6dFSJ3EvouGPepYD1_oSncpZXhA/viewform?usp=publish-editor";
+const programInquiryFormUrl =
+  "https://docs.google.com/forms/d/e/1FAIpQLScxd-i2n07F-uv_EWplBorwSLUn4oGl7Rozeh23PuoUqFk0rQ/viewform?usp=publish-editor";
+
 const mapLinks = [
   {
     name: "카카오맵",
@@ -36,14 +42,24 @@ export default function SingleDemoPage() {
             <h3>지금 겪고 있는 어려움을 편안하게 이야기하세요</h3>
             <p>우울, 불안, 관계의 어려움 등 어떤 주제든 괜찮습니다. 전문 상담자가 함께 실마리를 찾아갑니다.</p>
           </div>
-          <Link href="/#site-notices">소식 보기</Link>
+          <div className="service-panel-actions">
+            <Link href="/#site-notices">소식 보기</Link>
+            <a href={counselingInquiryFormUrl} target="_blank" rel="noreferrer">
+              상담 문의
+            </a>
+          </div>
         </article>
         <article className="service-panel service-workshop">
           <div>
             <h3>임상 실무 역량을 단계적으로 키워갑니다</h3>
             <p>입문부터 심화까지, 수준에 맞는 전문가 교육 프로그램을 운영합니다.</p>
           </div>
-          <Link href="/nested">프로그램 살펴보기</Link>
+          <div className="service-panel-actions">
+            <Link href="/nested">프로그램 살펴보기</Link>
+            <a href={programInquiryFormUrl} target="_blank" rel="noreferrer">
+              프로그램 문의
+            </a>
+          </div>
         </article>
       </section>
 
