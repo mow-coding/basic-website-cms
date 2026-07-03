@@ -1,8 +1,8 @@
 import { WorkshopCardCarousel, type WorkshopCardCarouselItem } from "@/components/workshop-card-carousel";
+import { NoticeBrowser } from "@/components/notice-browser";
 import { loadAllWorkshopCalendars, type CalendarEvent, type WorkshopCalendarState } from "@/lib/calendar";
 import { loadPublicSiteContent } from "@/lib/public-site-content";
-import { WorkshopOverviewNotices, type WorkshopOverviewGroup } from "@/components/workshop-overview-notices";
-import { WORKSHOP_NOTICE_LABELS, workshopNoticeLabelSet as workshopLabelSet } from "@/lib/workshop-labels";
+import type { NoticeCategory } from "@/lib/site-data";
 
 export const revalidate = 60;
 
@@ -11,6 +11,14 @@ export const metadata = {
   description: "프로그램 A, B, C, D 안내와 일정을 확인합니다.",
 };
 
+type WorkshopsPageProps = {
+  searchParams?: Promise<{
+    notice?: string;
+  }>;
+};
+
+type WorkshopNotice = Awaited<ReturnType<typeof loadPublicSiteContent>>["notices"][number];
+
 const seoulDateFormatter = new Intl.DateTimeFormat("ko-KR", {
   timeZone: "Asia/Seoul",
   year: "numeric",
@@ -18,7 +26,8 @@ const seoulDateFormatter = new Intl.DateTimeFormat("ko-KR", {
   day: "2-digit",
 });
 
-export default async function WorkshopsPage() {
+export default async function WorkshopsPage({ searchParams }: WorkshopsPageProps) {
+  const noticeParams = await searchParams;
   const content = await loadPublicSiteContent({ includeNoticeBodies: false });
   const calendars = await loadAllWorkshopCalendars(content.workshops, content.generalSchedules, content.workshopRuns);
   const calendarByWorkshop = new Map(calendars.map((calendar) => [calendar.workshop, calendar]));
@@ -39,30 +48,16 @@ export default async function WorkshopsPage() {
     };
   });
 
-  const workshopLabelsOf = (notice: (typeof content.notices)[number]) =>
-    notice.labels.filter((label) => workshopLabelSet.has(label));
-  const createdSortValue = (notice: (typeof content.notices)[number]) =>
-    "createdAtIso" in notice && typeof notice.createdAtIso === "string" ? notice.createdAtIso : notice.createdAt;
-  const byCreatedDesc = (a: (typeof content.notices)[number], b: (typeof content.notices)[number]) =>
-    createdSortValue(b).localeCompare(createdSortValue(a), "ko-KR");
-  const labeledNotices = content.notices.filter((notice) => workshopLabelsOf(notice).length >= 1);
-  const noticeGroups: WorkshopOverviewGroup[] = [
-    {
-      key: "general",
-      label: "일반",
-      notices: labeledNotices.filter((notice) => workshopLabelsOf(notice).length >= 2).sort(byCreatedDesc)
-    },
-    ...WORKSHOP_NOTICE_LABELS.map((label) => ({
-      key: label.toLowerCase(),
-      label,
-      notices: labeledNotices
-        .filter((notice) => {
-          const workshopLabels = workshopLabelsOf(notice);
-          return workshopLabels.length === 1 && workshopLabels[0] === label;
-        })
-        .sort(byCreatedDesc)
-    }))
-  ];
+  // 개요 페이지는 특정 프로그램 필터 없이 공개 게시물 전체를 브라우저에 넘긴다.
+  const publicNotices = content.notices;
+  const selectedNotice = noticeParams?.notice
+    ? content.notices.find((notice) => String(notice.id) === noticeParams.notice)
+    : undefined;
+  const browserNotices = (
+    selectedNotice && !publicNotices.some((notice) => notice.id === selectedNotice.id)
+      ? [...publicNotices, selectedNotice]
+      : publicNotices
+  ).map(toBrowserNotice);
 
   return (
     <>
@@ -71,11 +66,20 @@ export default async function WorkshopsPage() {
         <p>여기에 프로그램 목록의 안내 문구가 들어갑니다</p>
       </section>
       <WorkshopCardCarousel items={carouselItems} />
-      <section className="section workshop-post-section" aria-label="프로그램 게시물">
-        <WorkshopOverviewNotices groups={noticeGroups} />
-      </section>
+      <NoticeBrowser authors={content.authors} notices={browserNotices} />
     </>
   );
+}
+
+// 프로그램 공지는 게시물 브라우저의 "공지사항" 탭에서 보이도록 전체 공지로 매핑한다.
+function toBrowserNotice(notice: WorkshopNotice) {
+  if (notice.category !== "프로그램 공지") {
+    return notice;
+  }
+
+  const generalNoticeCategory: NoticeCategory = "전체 공지";
+
+  return { ...notice, category: generalNoticeCategory };
 }
 
 function getLatestSessionEvent(calendar?: WorkshopCalendarState) {

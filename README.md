@@ -71,7 +71,9 @@ npm run admin:dev
 npm run site:dev
 ```
 
-관리자 로그인 허용 계정은 `apps/admin/lib/site-admin/allowed-users.ts`에서 수정합니다. 여기에 등록된 이메일의 Google 계정만 로그인할 수 있습니다.
+로컬 개발 모드에서는 관리자 로그인 화면에 **"데모 계정으로 로그인"** 버튼이 나타납니다. Google OAuth 설정 없이도 시드된 데모 계정으로 콘솔을 바로 둘러볼 수 있습니다. 이 버튼은 개발 모드에서만 활성화되며, 프로덕션 빌드에서는 코드 레벨에서 차단됩니다.
+
+실제 운영에서는 Google OAuth만 사용합니다. 로그인 허용 계정은 `apps/admin/lib/site-admin/allowed-users.ts`에서 수정합니다. 여기에 등록된 이메일의 Google 계정만 로그인할 수 있습니다.
 
 ## 배포
 

@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 
 type SignInFormProps = {
   googleEnabled: boolean;
+  demoEnabled: boolean;
 };
 
 function GoogleIcon() {
@@ -27,11 +28,12 @@ function GoogleIcon() {
   );
 }
 
-export default function SignInForm({ googleEnabled }: SignInFormProps) {
+export default function SignInForm({ googleEnabled, demoEnabled }: SignInFormProps) {
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
   function onGoogleSignIn() {
-    if (googleLoading) {
+    if (googleLoading || demoLoading) {
       return;
     }
 
@@ -44,7 +46,21 @@ export default function SignInForm({ googleEnabled }: SignInFormProps) {
     });
   }
 
-  if (!googleEnabled) {
+  function onDemoSignIn() {
+    if (googleLoading || demoLoading) {
+      return;
+    }
+
+    setDemoLoading(true);
+
+    void signIn("demo", {
+      callbackUrl: "/site-admin"
+    }).catch(() => {
+      setDemoLoading(false);
+    });
+  }
+
+  if (!googleEnabled && !demoEnabled) {
     return (
       <p className="error-text" role="alert">
         Google 로그인을 사용할 수 없습니다.
@@ -53,9 +69,24 @@ export default function SignInForm({ googleEnabled }: SignInFormProps) {
   }
 
   return (
-    <button className="google-signin-button" type="button" disabled={googleLoading} aria-busy={googleLoading} onClick={onGoogleSignIn}>
-      <span className="google-signin-icon-box">{googleLoading ? <span className="google-signin-spinner" aria-hidden="true" /> : <GoogleIcon />}</span>
-      <span>{googleLoading ? "로그인 화면으로 이동 중..." : "Google 계정으로 로그인"}</span>
-    </button>
+    <div className="signin-button-stack">
+      {googleEnabled ? (
+        <button className="google-signin-button" type="button" disabled={googleLoading} aria-busy={googleLoading} onClick={onGoogleSignIn}>
+          <span className="google-signin-icon-box">{googleLoading ? <span className="google-signin-spinner" aria-hidden="true" /> : <GoogleIcon />}</span>
+          <span>{googleLoading ? "로그인 화면으로 이동 중..." : "Google 계정으로 로그인"}</span>
+        </button>
+      ) : null}
+      {demoEnabled ? (
+        <button
+          className="google-signin-button demo-signin-button"
+          type="button"
+          disabled={demoLoading}
+          aria-busy={demoLoading}
+          onClick={onDemoSignIn}
+        >
+          <span>{demoLoading ? "데모 계정으로 입장 중..." : "데모 계정으로 로그인 (개발 모드)"}</span>
+        </button>
+      ) : null}
+    </div>
   );
 }

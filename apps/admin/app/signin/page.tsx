@@ -1,5 +1,6 @@
 import { env } from "@/lib/env";
 import Image from "next/image";
+import { demoLoginEnabled } from "@/lib/auth";
 import SignInForm from "./signin-form";
 
 export default function SignInPage() {
@@ -13,7 +14,7 @@ export default function SignInPage() {
         <div className="signin-panel-brand signin-panel-brand-icon" aria-hidden="true">
           <Image src="/icon.png" alt="" width={44} height={44} priority />
         </div>
-        <SignInForm googleEnabled={googleEnabled} />
+        <SignInForm googleEnabled={googleEnabled} demoEnabled={demoLoginEnabled} />
       </section>
     </main>
   );

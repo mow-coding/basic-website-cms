@@ -1,19 +1,16 @@
 import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import { CalendarView } from "@/components/calendar-view";
-import { NoticeBrowser } from "@/components/notice-browser";
+import { WorkshopNoticeList } from "@/components/workshop-notice-list";
 import { getInitialCalendarMonth, loadAllWorkshopCalendars } from "@/lib/calendar";
 import { loadPublicSiteContent } from "@/lib/public-site-content";
-import { workshops, type NoticeCategory, type NoticeLabel, type WorkshopSlug } from "@/lib/site-data";
+import { workshops, type NoticeLabel, type WorkshopSlug } from "@/lib/site-data";
 import { workshopNoticeLabelSet as workshopLabelSet } from "@/lib/workshop-labels";
 
 export const revalidate = 60;
 
 type WorkshopPageProps = {
   params: Promise<{ slug: string }>;
-  searchParams?: Promise<{
-    notice?: string;
-  }>;
 };
 
 type WorkshopNotice = Awaited<ReturnType<typeof loadPublicSiteContent>>["notices"][number];
@@ -43,9 +40,8 @@ export async function generateMetadata({ params }: WorkshopPageProps) {
   };
 }
 
-export default async function WorkshopDetailPage({ params, searchParams }: WorkshopPageProps) {
+export default async function WorkshopDetailPage({ params }: WorkshopPageProps) {
   const { slug } = await params;
-  const noticeParams = await searchParams;
   const staticWorkshop = workshops.find((item) => item.slug === slug);
 
   if (!staticWorkshop) {
@@ -72,14 +68,10 @@ export default async function WorkshopDetailPage({ params, searchParams }: Works
       notice.labels.includes(workshopNoticeLabel) &&
       notice.labels.filter((label) => workshopLabelSet.has(label)).length === 1
   );
-  const selectedNotice = noticeParams?.notice
-    ? content.notices.find((notice) => String(notice.id) === noticeParams.notice)
-    : undefined;
-  const browserNotices = (
-    selectedNotice && !relatedPosts.some((notice) => notice.id === selectedNotice.id)
-      ? [...relatedPosts, selectedNotice]
-      : relatedPosts
-  ).map(toBrowserNotice);
+  const noticePosts = relatedPosts.filter((notice) => notice.category === "전체 공지" || notice.category === "프로그램 공지");
+  const resourcePosts = relatedPosts.filter((notice) => notice.category === "자료실");
+  const greenBoardPosts = relatedPosts.filter((notice) => notice.category === "자유게시판" && !notice.isWorkshopReview);
+  const reviewPosts = relatedPosts.filter((notice) => notice.category === "자유게시판" && notice.isWorkshopReview);
 
   const calendarNotices = getNoticesForCalendar(calendar.events, content.notices);
 
@@ -131,21 +123,17 @@ export default async function WorkshopDetailPage({ params, searchParams }: Works
         {calendar.error ? <p className="empty-state">캘린더를 불러오지 못했습니다: {calendar.error}</p> : null}
       </section>
 
-      <NoticeBrowser authors={content.authors} notices={browserNotices} />
+      <section className="section workshop-post-section">
+        <WorkshopNoticeList
+          greenBoardPosts={greenBoardPosts}
+          noticePosts={noticePosts}
+          resourcePosts={resourcePosts}
+          reviewPosts={reviewPosts}
+        />
+      </section>
 
     </>
   );
-}
-
-// 프로그램 공지는 게시물 브라우저의 "공지사항" 탭에서 보이도록 전체 공지로 매핑한다.
-function toBrowserNotice(notice: WorkshopNotice) {
-  if (notice.category !== "프로그램 공지") {
-    return notice;
-  }
-
-  const generalNoticeCategory: NoticeCategory = "전체 공지";
-
-  return { ...notice, category: generalNoticeCategory };
 }
 
 function getNoticesForCalendar(events: Array<{ noticePostId?: string }>, notices: WorkshopNotice[]) {
