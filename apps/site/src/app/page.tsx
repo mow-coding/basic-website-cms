@@ -38,7 +38,7 @@ export default async function Home() {
       <section className="home-hero">
         <div className="home-hero-inner">
           <div className="home-hero-copy">
-            <p className="hero-kicker">여기에 슬로건이 들어갑니다</p>
+            <p className="hero-kicker">마음을 이해하는 첫 번째 자리</p>
             <span className="hero-divider" aria-hidden="true" />
             <p className="hero-quote">
               {siteConfig.heroCopy[0]}

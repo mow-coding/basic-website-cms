@@ -17,12 +17,12 @@ function normalizeSiteDomain(domain?: string) {
 
 export const siteConfig = {
   name: "모오 임상심리연구소",
-  title: "전문적 심리치료 및 심리검사 서비스",
+  title: "마음을 이해하는 임상심리 전문기관",
   domain: normalizeSiteDomain(process.env.NEXT_PUBLIC_SITE_URL),
   email: "admin@example.com",
   description:
-    "모오 임상심리연구소의 공개 웹사이트 데모입니다. 실제 소개 문구는 운영 환경에서 작성합니다.",
-  heroCopy: ["여기에 소개 문장이 들어갑니다", "두 줄까지 쓸 수 있습니다"],
+    "모오 임상심리연구소는 심리상담과 심리평가, 임상심리 전문가 교육 프로그램을 운영하는 전문기관입니다.",
+  heroCopy: ["혼자 감당해온 마음의 무게가 있다면", "이제 전문가와 함께 살펴볼 때입니다"],
   colors: {
     blue: "#4E73AA",
     deepBlue: "#2A5F7F",
@@ -54,16 +54,16 @@ export const workshops: Array<{
     slug: "program-a",
     shortName: "프로그램A",
     title: "프로그램 A",
-    description: "여기에 프로그램 A의 소개 문구가 들어갑니다.\n실제 문구는 운영 환경에서 작성합니다.",
+    description: "실무의 기초를 처음부터 차근차근 다지는 입문 과정입니다.",
     cardImage: {
-      src: "/og-image.png",
-      alt: "프로그램 A 대표 이미지 자리입니다.",
+      src: "/program-a.jpg",
+      alt: "안개가 낮게 깔린 산과 숲",
       width: 1200,
       height: 630,
     },
     introParagraphs: [
-      ["여기에 프로그램 A의 첫 번째 소개 문단이 들어갑니다."],
-      ["여기에 프로그램 A의 두 번째 소개 문단이 들어갑니다."],
+      ["프로그램 A는 임상 현장에 처음 발을 들이는 분들을 위한 입문 과정입니다. 심리평가와 상담의 기본 개념을 이론 강의로 익히고, 간단한 사례로 실제 흐름을 경험합니다."],
+      ["매 회차는 강의와 토론, 실습으로 구성되어 배운 내용을 바로 적용해 볼 수 있습니다. 관련 전공생과 초심 실무자 모두에게 열려 있습니다."],
     ],
     status: "신청 중",
     courses: [],
@@ -72,16 +72,16 @@ export const workshops: Array<{
     slug: "program-b",
     shortName: "프로그램B",
     title: "프로그램 B",
-    description: "여기에 프로그램 B의 소개 문구가 들어갑니다.",
+    description: "핵심만 짧게 집중해서 다루는 단기 특강 과정입니다.",
     cardImage: {
-      src: "/og-image.png",
-      alt: "프로그램 B 대표 이미지 자리입니다.",
+      src: "/program-b.jpg",
+      alt: "옅은 안개에 잠긴 숲",
       width: 1200,
       height: 630,
     },
     introParagraphs: [
-      ["여기에 프로그램 B의 첫 번째 소개 문단이 들어갑니다."],
-      ["여기에 프로그램 B의 두 번째 소개 문단이 들어갑니다."],
+      ["프로그램 B는 특정 주제를 짧고 깊게 다루는 단기 특강입니다. 바쁜 일정 속에서도 핵심을 놓치지 않도록 하루나 이틀 과정으로 구성됩니다."],
+      ["이론 요약과 사례 중심의 논의를 함께 진행하여, 짧은 시간 안에 실질적인 도움을 얻어 가실 수 있습니다."],
     ],
     status: "등록된 일정 없음",
     courses: [],
@@ -90,16 +90,16 @@ export const workshops: Array<{
     slug: "program-c",
     shortName: "프로그램C",
     title: "프로그램 C",
-    description: "여기에 프로그램 C의 소개 문구가 들어갑니다.\n단계별 일정이 있는 프로그램 예시입니다.",
+    description: "여러 단계에 걸쳐 이론과 실습을 함께 쌓아가는 단계별 과정입니다.",
     cardImage: {
-      src: "/og-image.png",
-      alt: "프로그램 C 대표 이미지 자리입니다.",
+      src: "/program-c.jpg",
+      alt: "안개가 흐르는 능선",
       width: 1200,
       height: 630,
     },
     introParagraphs: [
-      ["여기에 프로그램 C의 첫 번째 소개 문단이 들어갑니다."],
-      ["여기에 프로그램 C의 두 번째 소개 문단이 들어갑니다."],
+      ["프로그램 C는 여러 단계로 진행되는 심화 과정입니다. 단계마다 이론을 다지고 사례 실습을 반복하며 참여자들이 서로의 시선을 나눕니다."],
+      ["단계가 올라갈수록 다루는 사례의 난이도가 높아지며, 전 과정을 이수하면 실무에 필요한 흐름을 체계적으로 익히게 됩니다."],
     ],
     status: "신청 중",
     courses: [],
@@ -108,16 +108,16 @@ export const workshops: Array<{
     slug: "program-d",
     shortName: "프로그램D",
     title: "프로그램 D",
-    description: "여기에 프로그램 D의 소개 문구가 들어갑니다.",
+    description: "실제 사례를 깊이 있게 다루는 고급 심화 과정입니다.",
     cardImage: {
-      src: "/og-image.png",
-      alt: "프로그램 D 대표 이미지 자리입니다.",
+      src: "/program-d.jpg",
+      alt: "안개 낀 잔잔한 호수",
       width: 1200,
       height: 630,
     },
     introParagraphs: [
-      ["여기에 프로그램 D의 첫 번째 소개 문단이 들어갑니다."],
-      ["여기에 프로그램 D의 두 번째 소개 문단이 들어갑니다."],
+      ["프로그램 D는 실제 사례를 깊이 있게 검토하는 고급 과정입니다. 이미 실무 경험이 있는 분들이 자신의 사례를 가지고 와 함께 논의합니다."],
+      ["소수 인원으로 진행되며, 슈퍼비전과 토론을 통해 각자의 관점을 정교하게 다듬어 갑니다."],
     ],
     status: "신청 중",
     courses: [],
@@ -126,68 +126,82 @@ export const workshops: Array<{
 
 // 캐노니컬 데모 게시물 1~5(비자료실). 어드민 시드(seed-demo-content.mjs)와 동일한 세계를
 // 정적 폴백으로 재현합니다. 6·7번(자료실)은 아래 resources 배열로 노출합니다.
-const demoNoticeBody = [
-  "예시 게시물 본문입니다. 실제 콘텐츠는 관리자에서 작성합니다.",
-];
+// 각 게시물은 고유 본문을 가집니다(시드의 <p>…</p> HTML과 문안이 100% 일치).
 
 export const notices = [
   {
     id: 101,
-    title: "예시 공지사항입니다",
+    title: "2026년 상반기 상담·검사 운영 시간 안내",
     category: "전체 공지" as NoticeCategory,
     labels: [] as NoticeLabel[],
     author: "관리자",
     createdAt: "2026.04.26 17:30",
     updatedAt: "-",
     official: true,
-    body: demoNoticeBody,
+    body: [
+      "3월부터 상담과 심리검사 예약 가능 시간이 일부 조정됩니다.",
+      "평일은 오전 10시부터 오후 7시까지, 토요일은 오후 2시까지 운영합니다.",
+      "예약과 문의는 홈페이지 문의 양식을 이용해 주시기 바랍니다.",
+    ],
     relatedLinks: [] as Array<{ title: string; url: string }>,
     attachments: [] as Array<{ title: string; url: string }>,
   },
   {
     id: 102,
     // GENERAL + 프로그램 라벨 → 홈에서 "프로그램 공지" 섹션에 노출됩니다.
-    title: "예시 프로그램 공지입니다",
+    title: "프로그램 A 3기 수강생을 모집합니다",
     category: "전체 공지" as NoticeCategory,
     labels: ["프로그램A"] as NoticeLabel[],
     author: "관리자",
     createdAt: "2026.04.26 17:20",
     updatedAt: "-",
     official: true,
-    body: demoNoticeBody,
+    body: [
+      "심리평가 실무의 기초를 처음부터 다지고자 하는 분들을 위한 프로그램 A 3기 수강생을 모집합니다.",
+      "정원은 20명이며 신청은 선착순으로 마감됩니다.",
+      "자세한 일정과 신청 방법은 프로그램 안내 페이지에서 확인하실 수 있습니다.",
+    ],
     relatedLinks: [] as Array<{ title: string; url: string }>,
     attachments: [] as Array<{ title: string; url: string }>,
   },
   {
     id: 103,
-    title: "예시 안내 게시물입니다",
+    title: "심리상담은 이렇게 진행됩니다",
     category: "안내" as NoticeCategory,
     labels: [] as NoticeLabel[],
     author: "관리자",
     createdAt: "2026.04.26 17:10",
     updatedAt: "-",
     official: true,
-    body: demoNoticeBody,
+    body: [
+      "첫 상담에서는 지금 겪고 계신 어려움과 상담을 통해 바라는 변화를 함께 이야기합니다.",
+      "이후 상담자와 협의하여 상담의 방향과 횟수를 정합니다.",
+      "상담에서 나눈 내용은 철저히 비밀이 보장됩니다.",
+    ],
     relatedLinks: [] as Array<{ title: string; url: string }>,
     attachments: [] as Array<{ title: string; url: string }>,
   },
   {
     id: 104,
-    title: "예시 자유게시판 글입니다",
+    title: "연구소 서가에 새 책들을 들였습니다",
     category: "자유게시판" as NoticeCategory,
     labels: [] as NoticeLabel[],
     author: "운영자 1",
     createdAt: "2026.04.26 17:00",
     updatedAt: "-",
     official: false,
-    body: demoNoticeBody,
+    body: [
+      "이번 달에는 감정 조절과 애착을 다룬 책 몇 권을 서가에 새로 두었습니다.",
+      "상담을 기다리시는 동안 편하게 읽어보실 수 있습니다.",
+      "함께 읽고 싶은 책이 있다면 언제든 알려주세요.",
+    ],
     relatedLinks: [] as Array<{ title: string; url: string }>,
     attachments: [] as Array<{ title: string; url: string }>,
   },
   {
     id: 105,
     // 후기: 운영자 1 + GREEN_BOARD + 프로그램C 라벨 → 후기/리뷰 탭에 노출됩니다.
-    title: "예시 후기 게시물입니다",
+    title: "프로그램 C를 마치며 남기는 기록",
     category: "자유게시판" as NoticeCategory,
     labels: ["프로그램C"] as NoticeLabel[],
     author: "운영자 1",
@@ -195,7 +209,11 @@ export const notices = [
     updatedAt: "-",
     official: false,
     isWorkshopReview: true,
-    body: demoNoticeBody,
+    body: [
+      "여러 단계를 함께한 프로그램 C가 이번 주로 마무리되었습니다.",
+      "매주 사례를 나누며 서로의 시선을 배우는 시간이었습니다.",
+      "참여해 주신 모든 분께 감사드리며, 다음 기수에서 다시 뵙기를 바랍니다.",
+    ],
     relatedLinks: [] as Array<{ title: string; url: string }>,
     attachments: [] as Array<{ title: string; url: string }>,
   },
@@ -203,28 +221,36 @@ export const notices = [
     // 캐노니컬 자료실 게시물 6·7. 운영 어드민에서는 RESOURCE 게시물도 notices 스트림으로
     // 내려오므로, 워크숍 상세 페이지의 "자료실" 탭이 폴백에서도 동일하게 채워지도록 여기에 둡니다.
     id: 106,
-    title: "예시 프로그램 A 자료입니다",
+    title: "프로그램 A 1회차 참고자료를 공유합니다",
     category: "자료실" as NoticeCategory,
     labels: ["프로그램A"] as NoticeLabel[],
     author: "관리자",
     createdAt: "2026.04.26 16:40",
     updatedAt: "-",
     official: true,
-    body: demoNoticeBody,
-    relatedLinks: [{ title: "예시 자료 링크", url: "https://example.com/resource" }],
+    body: [
+      "프로그램 A 1회차에서 다룬 기본 개념 정리 자료를 공유합니다.",
+      "수강생 여러분은 아래 링크에서 자료를 내려받으실 수 있습니다.",
+      "복습에 참고해 주시기 바랍니다.",
+    ],
+    relatedLinks: [{ title: "1회차 참고자료 (PDF)", url: "https://example.com/resource" }],
     attachments: [] as Array<{ title: string; url: string }>,
   },
   {
     id: 107,
-    title: "예시 프로그램 C 자료입니다",
+    title: "프로그램 C 사례 정리 양식을 배포합니다",
     category: "자료실" as NoticeCategory,
     labels: ["프로그램C"] as NoticeLabel[],
     author: "관리자",
     createdAt: "2026.04.26 16:30",
     updatedAt: "-",
     official: true,
-    body: demoNoticeBody,
-    relatedLinks: [{ title: "예시 자료 링크", url: "https://example.com/resource" }],
+    body: [
+      "프로그램 C에서 사용하는 사례 정리 양식을 배포합니다.",
+      "다음 시간까지 각자 맡은 사례를 양식에 맞추어 정리해 오시면 됩니다.",
+      "궁금한 점은 담당 운영자에게 문의해 주세요.",
+    ],
+    relatedLinks: [{ title: "사례 정리 양식 (문서)", url: "https://example.com/resource" }],
     attachments: [] as Array<{ title: string; url: string }>,
   },
 ];
@@ -235,8 +261,8 @@ export const resources = [
     id: 201,
     workshop: "program-a" as WorkshopSlug,
     session: "제1회 프로그램 A",
-    title: "예시 프로그램 A 자료입니다",
-    description: "예시 게시물 본문입니다. 실제 콘텐츠는 관리자에서 작성합니다.",
+    title: "프로그램 A 1회차 참고자료를 공유합니다",
+    description: "프로그램 A 1회차에서 다룬 기본 개념 정리 자료를 공유합니다.",
     url: "https://example.com/resource",
     author: "관리자",
     createdAt: "2026.04.26 17:32",
@@ -246,8 +272,8 @@ export const resources = [
     id: 202,
     workshop: "program-c" as WorkshopSlug,
     session: "제1회 프로그램 C",
-    title: "예시 프로그램 C 자료입니다",
-    description: "예시 게시물 본문입니다. 실제 콘텐츠는 관리자에서 작성합니다.",
+    title: "프로그램 C 사례 정리 양식을 배포합니다",
+    description: "프로그램 C에서 사용하는 사례 정리 양식을 배포합니다.",
     url: "https://example.com/resource",
     author: "관리자",
     createdAt: "2026.04.26 17:33",
@@ -285,17 +311,53 @@ function seoulOffsetIso(daysFromNow: number, hour = 0, minute = 0) {
 type FallbackGeneralScheduleSpec = {
   id: string;
   title: string;
+  description: string;
   day: number;
   startHour: number;
   endHour: number;
 };
 
 const fallbackGeneralScheduleSpecs: FallbackGeneralScheduleSpec[] = [
-  { id: "general-1", title: "예시 기본 일정입니다", day: 14, startHour: 10, endHour: 12 },
-  { id: "general-2", title: "예시 휴무 안내 일정입니다", day: 3, startHour: 10, endHour: 18 },
-  { id: "general-3", title: "예시 내부 세미나 일정입니다", day: 8, startHour: 14, endHour: 17 },
-  { id: "general-4", title: "예시 정기 모임 일정입니다", day: 22, startHour: 19, endHour: 21 },
-  { id: "general-5", title: "예시 특별 행사 일정입니다", day: 40, startHour: 10, endHour: 16 },
+  {
+    id: "general-1",
+    title: "월례 공개 사례 세미나",
+    description: "매달 한 차례, 관심 있는 분들과 사례를 함께 살펴보는 공개 세미나입니다.",
+    day: 14,
+    startHour: 10,
+    endHour: 12,
+  },
+  {
+    id: "general-2",
+    title: "여름 정기 휴무 안내",
+    description: "연구소 정기 휴무일입니다. 이날은 상담과 문의 응대가 어렵습니다.",
+    day: 3,
+    startHour: 10,
+    endHour: 18,
+  },
+  {
+    id: "general-3",
+    title: "상담자 집단 슈퍼비전",
+    description: "상담자들이 모여 사례를 검토하고 서로의 관점을 나누는 내부 모임입니다.",
+    day: 8,
+    startHour: 14,
+    endHour: 17,
+  },
+  {
+    id: "general-4",
+    title: "저녁 심리학 독서모임",
+    description: "심리학 책 한 권을 함께 읽고 이야기 나누는 저녁 모임입니다.",
+    day: 22,
+    startHour: 19,
+    endHour: 21,
+  },
+  {
+    id: "general-5",
+    title: "가을 마음건강 공개 특강",
+    description: "일반인을 위한 마음건강 주제의 공개 특강입니다. 사전 신청을 받습니다.",
+    day: 40,
+    startHour: 10,
+    endHour: 16,
+  },
 ];
 
 // PublicGeneralSchedule[] 형태로 반환합니다.
@@ -304,7 +366,7 @@ export function buildFallbackGeneralSchedules() {
   return fallbackGeneralScheduleSpecs.map((spec) => ({
     id: spec.id,
     title: spec.title,
-    description: "예시 일정 설명입니다. 실제 일정은 관리자에서 등록합니다.",
+    description: spec.description,
     date: seoulOffsetIso(spec.day, spec.startHour, 0),
     endsAt: seoulOffsetIso(spec.day, spec.endHour, 0),
     createdAt: nowIso,
@@ -322,12 +384,14 @@ type FallbackStageSpec = {
 };
 type FallbackRunSpec = {
   workshopSlug: WorkshopSlug;
+  description: string;
   stages: FallbackStageSpec[];
 };
 
 const fallbackWorkshopRunSpecs: FallbackRunSpec[] = [
   {
     workshopSlug: "program-a",
+    description: "실무의 기초를 처음부터 다지는 입문 과정입니다.",
     stages: [
       {
         stageName: "1단계",
@@ -343,6 +407,7 @@ const fallbackWorkshopRunSpecs: FallbackRunSpec[] = [
   },
   {
     workshopSlug: "program-c",
+    description: "여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다.",
     stages: [
       {
         stageName: "1단계",
@@ -362,6 +427,7 @@ const fallbackWorkshopRunSpecs: FallbackRunSpec[] = [
   },
   {
     workshopSlug: "program-d",
+    description: "실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다.",
     stages: [
       {
         stageName: "1단계",
@@ -404,7 +470,7 @@ export function buildFallbackWorkshopRuns() {
     runNumber,
     runLabel: "",
     applicationFormUrl: "https://example.com",
-    description: "예시 프로그램 런 설명입니다.",
+    description: runSpec.description,
     noticePost: null,
     stages: runSpec.stages.map((stage, stageIndex) => ({
       id: `${runSpec.workshopSlug}-stage-${stageIndex}`,

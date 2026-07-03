@@ -330,7 +330,7 @@ main {
   border-radius: var(--radius-xl);
   background:
     linear-gradient(135deg, rgb(42 95 127 / 84%), rgb(78 115 170 / 76%)),
-    url("/banner.png") center / cover;
+    url("/hero.jpg") center / cover;
   box-shadow: var(--shadow-blue);
 }
 

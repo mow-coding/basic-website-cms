@@ -63,7 +63,7 @@ export default async function WorkshopsPage({ searchParams }: WorkshopsPageProps
     <>
       <section className="page-hero">
         <h1>중첩</h1>
-        <p>여기에 프로그램 목록의 안내 문구가 들어갑니다</p>
+        <p>입문부터 심화까지, 모오 임상심리연구소의 전문가 교육 프로그램을 한눈에 살펴보세요</p>
       </section>
       <WorkshopCardCarousel items={carouselItems} />
       <NoticeBrowser authors={content.authors} notices={browserNotices} />

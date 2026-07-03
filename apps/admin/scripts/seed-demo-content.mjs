@@ -5,54 +5,80 @@ const prisma = new PrismaClient();
 const adminEmail = "admin@example.com";
 const editorOneEmail = "editor-one@example.com";
 
-const demoPostBody =
-  "<p>예시 게시물 본문입니다. 실제 콘텐츠는 관리자에서 작성합니다.</p>";
-
+// 게시물별 고유 본문. 사이트 정적 폴백(site-data.ts)의 문단 배열과 문안이 100% 일치합니다.
 const demoPosts = [
   {
-    title: "예시 공지사항입니다",
+    title: "2026년 상반기 상담·검사 운영 시간 안내",
     category: "GENERAL",
     labels: [],
-    authorEmail: adminEmail
+    authorEmail: adminEmail,
+    body:
+      "<p>3월부터 상담과 심리검사 예약 가능 시간이 일부 조정됩니다.</p>" +
+      "<p>평일은 오전 10시부터 오후 7시까지, 토요일은 오후 2시까지 운영합니다.</p>" +
+      "<p>예약과 문의는 홈페이지 문의 양식을 이용해 주시기 바랍니다.</p>"
   },
   {
-    title: "예시 프로그램 공지입니다",
+    title: "프로그램 A 3기 수강생을 모집합니다",
     category: "GENERAL",
     labels: ["프로그램A"],
-    authorEmail: adminEmail
+    authorEmail: adminEmail,
+    body:
+      "<p>심리평가 실무의 기초를 처음부터 다지고자 하는 분들을 위한 프로그램 A 3기 수강생을 모집합니다.</p>" +
+      "<p>정원은 20명이며 신청은 선착순으로 마감됩니다.</p>" +
+      "<p>자세한 일정과 신청 방법은 프로그램 안내 페이지에서 확인하실 수 있습니다.</p>"
   },
   {
-    title: "예시 안내 게시물입니다",
+    title: "심리상담은 이렇게 진행됩니다",
     category: "COUNSELING",
     labels: [],
-    authorEmail: adminEmail
+    authorEmail: adminEmail,
+    body:
+      "<p>첫 상담에서는 지금 겪고 계신 어려움과 상담을 통해 바라는 변화를 함께 이야기합니다.</p>" +
+      "<p>이후 상담자와 협의하여 상담의 방향과 횟수를 정합니다.</p>" +
+      "<p>상담에서 나눈 내용은 철저히 비밀이 보장됩니다.</p>"
   },
   {
-    title: "예시 자유게시판 글입니다",
+    title: "연구소 서가에 새 책들을 들였습니다",
     category: "GREEN_BOARD",
     labels: [],
-    authorEmail: editorOneEmail
+    authorEmail: editorOneEmail,
+    body:
+      "<p>이번 달에는 감정 조절과 애착을 다룬 책 몇 권을 서가에 새로 두었습니다.</p>" +
+      "<p>상담을 기다리시는 동안 편하게 읽어보실 수 있습니다.</p>" +
+      "<p>함께 읽고 싶은 책이 있다면 언제든 알려주세요.</p>"
   },
   {
     // 후기 게시물: 운영자 1 작성 + GREEN_BOARD + 프로그램 라벨 → 공개 사이트에서 후기로 분류됩니다.
-    title: "예시 후기 게시물입니다",
+    title: "프로그램 C를 마치며 남기는 기록",
     category: "GREEN_BOARD",
     labels: ["프로그램C"],
-    authorEmail: editorOneEmail
+    authorEmail: editorOneEmail,
+    body:
+      "<p>여러 단계를 함께한 프로그램 C가 이번 주로 마무리되었습니다.</p>" +
+      "<p>매주 사례를 나누며 서로의 시선을 배우는 시간이었습니다.</p>" +
+      "<p>참여해 주신 모든 분께 감사드리며, 다음 기수에서 다시 뵙기를 바랍니다.</p>"
   },
   {
-    title: "예시 프로그램 A 자료입니다",
+    title: "프로그램 A 1회차 참고자료를 공유합니다",
     category: "RESOURCE",
     labels: ["프로그램A"],
     authorEmail: adminEmail,
-    relatedLinks: [{ title: "예시 자료 링크", url: "https://example.com/resource" }]
+    body:
+      "<p>프로그램 A 1회차에서 다룬 기본 개념 정리 자료를 공유합니다.</p>" +
+      "<p>수강생 여러분은 아래 링크에서 자료를 내려받으실 수 있습니다.</p>" +
+      "<p>복습에 참고해 주시기 바랍니다.</p>",
+    relatedLinks: [{ title: "1회차 참고자료 (PDF)", url: "https://example.com/resource" }]
   },
   {
-    title: "예시 프로그램 C 자료입니다",
+    title: "프로그램 C 사례 정리 양식을 배포합니다",
     category: "RESOURCE",
     labels: ["프로그램C"],
     authorEmail: adminEmail,
-    relatedLinks: [{ title: "예시 자료 링크", url: "https://example.com/resource" }]
+    body:
+      "<p>프로그램 C에서 사용하는 사례 정리 양식을 배포합니다.</p>" +
+      "<p>다음 시간까지 각자 맡은 사례를 양식에 맞추어 정리해 오시면 됩니다.</p>" +
+      "<p>궁금한 점은 담당 운영자에게 문의해 주세요.</p>",
+    relatedLinks: [{ title: "사례 정리 양식 (문서)", url: "https://example.com/resource" }]
   }
 ];
 
@@ -95,7 +121,7 @@ async function seedPosts(usersByEmail) {
       data: {
         authorUserId: usersByEmail.get(post.authorEmail)?.id ?? null,
         title: post.title,
-        body: demoPostBody,
+        body: post.body,
         category: post.category,
         labels: post.labels,
         visibility: "PUBLIC",
@@ -109,11 +135,41 @@ async function seedPosts(usersByEmail) {
 }
 
 const demoGeneralSchedules = [
-  { title: "예시 기본 일정입니다", day: 14, startHour: 10, endHour: 12 },
-  { title: "예시 휴무 안내 일정입니다", day: 3, startHour: 10, endHour: 18 },
-  { title: "예시 내부 세미나 일정입니다", day: 8, startHour: 14, endHour: 17 },
-  { title: "예시 정기 모임 일정입니다", day: 22, startHour: 19, endHour: 21 },
-  { title: "예시 특별 행사 일정입니다", day: 40, startHour: 10, endHour: 16 }
+  {
+    title: "월례 공개 사례 세미나",
+    description: "매달 한 차례, 관심 있는 분들과 사례를 함께 살펴보는 공개 세미나입니다.",
+    day: 14,
+    startHour: 10,
+    endHour: 12
+  },
+  {
+    title: "여름 정기 휴무 안내",
+    description: "연구소 정기 휴무일입니다. 이날은 상담과 문의 응대가 어렵습니다.",
+    day: 3,
+    startHour: 10,
+    endHour: 18
+  },
+  {
+    title: "상담자 집단 슈퍼비전",
+    description: "상담자들이 모여 사례를 검토하고 서로의 관점을 나누는 내부 모임입니다.",
+    day: 8,
+    startHour: 14,
+    endHour: 17
+  },
+  {
+    title: "저녁 심리학 독서모임",
+    description: "심리학 책 한 권을 함께 읽고 이야기 나누는 저녁 모임입니다.",
+    day: 22,
+    startHour: 19,
+    endHour: 21
+  },
+  {
+    title: "가을 마음건강 공개 특강",
+    description: "일반인을 위한 마음건강 주제의 공개 특강입니다. 사전 신청을 받습니다.",
+    day: 40,
+    startHour: 10,
+    endHour: 16
+  }
 ];
 
 async function seedGeneralSchedules(usersByEmail) {
@@ -129,7 +185,7 @@ async function seedGeneralSchedules(usersByEmail) {
       data: {
         authorUserId: usersByEmail.get(adminEmail)?.id ?? null,
         title: schedule.title,
-        description: "예시 일정 설명입니다. 실제 일정은 관리자에서 등록합니다.",
+        description: schedule.description,
         date: futureDate(schedule.day, schedule.startHour, 0),
         endsAt: futureDate(schedule.day, schedule.endHour, 0),
         visibility: "PUBLIC"
@@ -145,6 +201,7 @@ const demoWorkshopRuns = [
   {
     // 프로그램 A: 신청 기간이 현재 진행 중인 단일 단계 런
     workshopSlug: "program-a",
+    description: "<p>실무의 기초를 처음부터 다지는 입문 과정입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -161,6 +218,7 @@ const demoWorkshopRuns = [
   {
     // 프로그램 C: 두 단계 런
     workshopSlug: "program-c",
+    description: "<p>여러 단계에 걸쳐 이론과 사례 실습을 함께 쌓아가는 단계별 과정입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -181,6 +239,7 @@ const demoWorkshopRuns = [
   {
     // 프로그램 D: 세 단계 런 (여러 달에 걸친 세션)
     workshopSlug: "program-d",
+    description: "<p>실제 사례를 깊이 있게 검토하는 고급 심화 과정입니다.</p>",
     stages: [
       {
         stageName: "1단계",
@@ -227,7 +286,7 @@ async function seedWorkshopRuns(usersByEmail) {
         year,
         runNumber,
         applicationFormUrl: "https://example.com",
-        description: "<p>예시 프로그램 런 설명입니다.</p>",
+        description: runConfig.description,
         visibility: "PUBLIC"
       },
       update: {}

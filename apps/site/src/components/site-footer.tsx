@@ -6,14 +6,14 @@ export function SiteFooter() {
       <div className="site-footer-inner">
         <section className="footer-service-summary" aria-label="모오 임상심리연구소 서비스 요약">
           <article className="footer-service-item">
-            <strong>여기에 첫 번째 서비스 이름이 들어갑니다</strong>
-            <span>Service One</span>
-            <p>여기에 첫 번째 서비스의 소개 문구가 들어갑니다.</p>
+            <strong>심리상담</strong>
+            <span>Counseling</span>
+            <p>개인의 상황에 맞추어 진행하는 전문 심리상담입니다.</p>
           </article>
           <article className="footer-service-item">
-            <strong>여기에 두 번째 서비스 이름이 들어갑니다</strong>
-            <span>Service Two</span>
-            <p>여기에 두 번째 서비스의 소개 문구가 들어갑니다.</p>
+            <strong>심리평가</strong>
+            <span>Psychological Assessment</span>
+            <p>종합 심리검사로 자신을 이해하는 폭을 넓힙니다.</p>
           </article>
         </section>
 

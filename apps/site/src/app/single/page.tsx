@@ -22,21 +22,21 @@ export default function SingleDemoPage() {
     <>
       <section className="page-hero">
         <h1>단일</h1>
-        <p className="hero-copy-nowrap">여기에 페이지를 소개하는 문구가 들어갑니다</p>
+        <p className="hero-copy-nowrap">마음을 살피고, 함께 방향을 찾는 공간</p>
       </section>
 
       <section className="section service-section" id="site-overview">
         <article className="service-panel">
           <div>
-            <h3>여기에 첫 번째 서비스를 소개하는 제목이 들어갑니다</h3>
-            <p>여기에 첫 번째 서비스의 설명 문구가 들어갑니다. 실제 문구는 운영 환경에서 작성합니다.</p>
+            <h3>지금 겪고 있는 어려움을 편안하게 이야기하세요</h3>
+            <p>우울, 불안, 관계의 어려움 등 어떤 주제든 괜찮습니다. 전문 상담자가 함께 실마리를 찾아갑니다.</p>
           </div>
-          <Link href="/#site-notices">자세히 보기</Link>
+          <Link href="/#site-notices">소식 보기</Link>
         </article>
         <article className="service-panel service-workshop">
           <div>
-            <h3>여기에 두 번째 서비스를 소개하는 제목이 들어갑니다</h3>
-            <p>여기에 두 번째 서비스의 설명 문구가 들어갑니다. 실제 문구는 운영 환경에서 작성합니다.</p>
+            <h3>임상 실무 역량을 단계적으로 키워갑니다</h3>
+            <p>입문부터 심화까지, 수준에 맞는 전문가 교육 프로그램을 운영합니다.</p>
           </div>
           <Link href="/nested">프로그램 살펴보기</Link>
         </article>
@@ -49,24 +49,26 @@ export default function SingleDemoPage() {
               상담진 안내
             </h2>
             <p>
-              여기에 상담진 소개 문구가 들어갑니다.
+              모오 임상심리연구소의 상담은 임상심리 전문 자격을 갖춘 상담자가 진행합니다.
               <br />
-              실제 소개 문구는 운영 환경에서 작성합니다.
+              각자의 전문 영역을 바탕으로 내담자의 상황에 맞는 방식을 함께 찾아갑니다.
             </p>
-            <p>여기에 추가 안내 문구가 들어갑니다. 실제 문구는 운영 환경에서 작성합니다.</p>
+            <p>상담자 배정과 자세한 약력은 예약 상담 시 안내해 드립니다.</p>
             <dl className="counselor-contact-list">
               <div>
                 <dt>예약 문의</dt>
-                <dd>00-0000-0000</dd>
+                <dd>02-0000-0000</dd>
               </div>
               <div>
                 <dt>문의 가능 시간</dt>
-                <dd>여기에 문의 가능 시간이 들어갑니다</dd>
+                <dd>평일 10:00 ~ 19:00 · 토요일 10:00 ~ 14:00</dd>
               </div>
             </dl>
           </div>
-          <figure className="counselor-photo-card" aria-label="상담진 사진 자리">
-            <figcaption>여기에 사진이 들어갑니다</figcaption>
+          <figure className="counselor-photo-card" aria-label="상담실 전경">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/counseling-room.jpg" alt="차분한 분위기의 상담실 코너" loading="lazy" />
+            <figcaption>상담실 전경</figcaption>
           </figure>
         </div>
       </section>
@@ -96,20 +98,22 @@ export default function SingleDemoPage() {
                     ))}
                   </nav>
                 </div>
-                <p className="location-address-text">여기에 주소가 들어갑니다</p>
+                <p className="location-address-text">연구소는 서울 도심에 자리하고 있습니다</p>
               </div>
-              <p className="location-guide-note">여기에 오시는 길 안내 문구가 들어갑니다. 실제 안내 문구는 운영 환경에서 작성합니다.</p>
+              <p className="location-guide-note">가까운 지하철역에서 도보로 이동하실 수 있습니다. 방문 전에 예약을 부탁드립니다.</p>
             </div>
             <div className="location-photo-grid">
               <div className="location-photo-card location-map-embed-card">
-                <p>여기에 지도 임베드가 들어갑니다</p>
+                <p>지도가 표시되는 자리입니다</p>
               </div>
-              <figure className="location-photo-card" aria-label="오시는 길 사진 자리">
-                <figcaption>여기에 사진이 들어갑니다</figcaption>
+              <figure className="location-photo-card" aria-label="연구소 입구">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/institute-entrance.jpg" alt="연구소 건물 외관" loading="lazy" />
+                <figcaption>연구소 입구</figcaption>
               </figure>
             </div>
             <div className="location-parking-note">
-              <p>여기에 주차 안내 문구가 들어갑니다.</p>
+              <p>건물 지하 주차장을 이용하실 수 있으며, 상담 시간 동안 무료로 주차하실 수 있습니다.</p>
             </div>
           </article>
         </div>
