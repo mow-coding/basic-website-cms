@@ -1,0 +1,15 @@
+declare module "tinymce/icons/default";
+declare module "tinymce/models/dom";
+declare module "tinymce/themes/silver";
+declare module "tinymce-i18n/langs6/ko_KR.js";
+declare module "tinymce/plugins/advlist";
+declare module "tinymce/plugins/autolink";
+declare module "tinymce/plugins/fullscreen";
+declare module "tinymce/plugins/image";
+declare module "tinymce/plugins/link";
+declare module "tinymce/plugins/lists";
+declare module "tinymce/plugins/nonbreaking";
+declare module "tinymce/plugins/searchreplace";
+declare module "tinymce/plugins/table";
+declare module "tinymce/plugins/visualblocks";
+declare module "tinymce/plugins/wordcount";

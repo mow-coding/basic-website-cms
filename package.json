@@ -1,0 +1,21 @@
+{
+  "name": "basic-website-cms",
+  "version": "1.0.0",
+  "private": true,
+  "description": "작은 조직을 위한 공개 웹사이트 + 관리자 콘솔 템플릿",
+  "license": "MIT",
+  "scripts": {
+    "site:dev": "npm --prefix apps/site run dev",
+    "site:lint": "npm --prefix apps/site run lint",
+    "site:typecheck": "npm --prefix apps/site run typecheck",
+    "site:build": "npm --prefix apps/site run build",
+    "admin:dev": "npm --prefix apps/admin run dev",
+    "admin:lint": "npm --prefix apps/admin run lint",
+    "admin:typecheck": "npm --prefix apps/admin run typecheck",
+    "admin:build": "npm --prefix apps/admin run build",
+    "admin:db:generate": "npm --prefix apps/admin run db:generate",
+    "admin:db:push": "npm --prefix apps/admin run db:push",
+    "admin:seed": "npm --prefix apps/admin run seed",
+    "admin:seed:demo": "npm --prefix apps/admin run seed:demo"
+  }
+}

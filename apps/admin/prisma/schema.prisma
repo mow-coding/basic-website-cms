@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ActionResult {
+  SUCCESS
+  DENIED
+  ERROR
+}
+
+enum SitePostCategory {
+  GENERAL
+  COUNSELING
+  GREEN_BOARD
+  RESOURCE
+}
+
+enum SiteContentVisibility {
+  PUBLIC
+  DRAFT
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  name             String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  auditLogs        AuditLog[]
+  sitePosts        SitePost[]
+  siteResources    SiteResource[]
+  generalSchedules GeneralSchedule[]
+  workshopRuns     WorkshopRun[]
+  authorProfile    AuthorProfile?
+}
+
+model AuditLog {
+  id           String       @id @default(uuid())
+  actorUserId  String?
+  action       String
+  resourceType String
+  resourceId   String?
+  result       ActionResult
+  metaJson     Json?
+  createdAt    DateTime     @default(now())
+  actorUser    User?        @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorUserId, createdAt])
+  @@index([resourceType, createdAt])
+}
+
+model AuthorProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  displayName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([displayName])
+}
+
+model SitePost {
+  id                     String                @id @default(uuid())
+  authorUserId           String?
+  title                  String
+  body                   String
+  legacyCreatedAtUnknown Boolean               @default(false)
+  category               SitePostCategory
+  labels                 String[]              @default([])
+  visibility             SiteContentVisibility @default(DRAFT)
+  relatedLinks           Json?
+  attachments            Json?
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  author                 User?                 @relation(fields: [authorUserId], references: [id], onDelete: SetNull)
+  linkedRuns             WorkshopRun[]         @relation("WorkshopRunNotice")
+  linkedScheduleStages   ScheduleStage[]       @relation("ScheduleStageNotice")
+  linkedScheduleSessions ScheduleSession[]     @relation("ScheduleSessionNotice")
+
+  @@index([category, visibility])
+  @@index([deletedAt, updatedAt])
+}
+
+model SiteResource {
+  id           String                @id @default(uuid())
+  authorUserId String?
+  workshopSlug String
+  session      String
+  title        String
+  description  String?
+  url          String
+  visibility   SiteContentVisibility @default(PUBLIC)
+  deletedAt    DateTime?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  author       User?                 @relation(fields: [authorUserId], references: [id], onDelete: SetNull)
+
+  @@index([workshopSlug, visibility])
+  @@index([deletedAt, updatedAt])
+}
+
+model GeneralSchedule {
+  id           String                @id @default(uuid())
+  authorUserId String?
+  title        String
+  description  String?
+  date         DateTime
+  endsAt       DateTime
+  visibility   SiteContentVisibility @default(PUBLIC)
+  deletedAt    DateTime?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  author       User?                 @relation(fields: [authorUserId], references: [id], onDelete: SetNull)
+
+  @@index([visibility, date])
+  @@index([deletedAt, date])
+}
+
+model WorkshopRun {
+  id                 String                @id @default(uuid())
+  authorUserId       String?
+  workshopSlug       String
+  year               Int
+  runNumber          Int
+  applicationFormUrl String?
+  noticePostId       String?
+  description        String?
+  visibility         SiteContentVisibility @default(PUBLIC)
+  deletedAt          DateTime?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  author             User?                 @relation(fields: [authorUserId], references: [id], onDelete: SetNull)
+  noticePost         SitePost?             @relation("WorkshopRunNotice", fields: [noticePostId], references: [id], onDelete: SetNull)
+  stages             ScheduleStage[]
+
+  @@unique([workshopSlug, year, runNumber])
+  @@index([workshopSlug, visibility])
+  @@index([deletedAt, year, runNumber])
+}
+
+model ScheduleStage {
+  id                  String            @id @default(uuid())
+  workshopRunId       String
+  stageName           String
+  orderIndex          Int
+  applicationStartsAt DateTime?
+  applicationEndsAt   DateTime?
+  applicationFormUrl  String?
+  noticePostId        String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  noticePost          SitePost?         @relation("ScheduleStageNotice", fields: [noticePostId], references: [id], onDelete: SetNull)
+  workshopRun         WorkshopRun       @relation(fields: [workshopRunId], references: [id], onDelete: Cascade)
+  sessions            ScheduleSession[]
+
+  @@index([workshopRunId, orderIndex])
+  @@index([noticePostId])
+}
+
+model ScheduleSession {
+  id                 String        @id @default(uuid())
+  scheduleStageId    String
+  dayIndex           Int
+  sessionDate        DateTime
+  startTime          String
+  endTime            String
+  applicationFormUrl String?
+  noticePostId       String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  noticePost         SitePost?     @relation("ScheduleSessionNotice", fields: [noticePostId], references: [id], onDelete: SetNull)
+  stage              ScheduleStage @relation(fields: [scheduleStageId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleStageId, dayIndex])
+  @@index([sessionDate])
+  @@index([noticePostId])
+}
