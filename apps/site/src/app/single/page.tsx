@@ -1,19 +1,24 @@
 import Link from "next/link";
+import { siteConfig } from "@/lib/site-data";
 
 export const metadata = {
   title: "단일",
 };
 
+// 오시는 길: siteConfig.address 한 값으로 지도 임베드와 길찾기 링크가 모두 구성됩니다.
+const mapQuery = encodeURIComponent(siteConfig.address);
+const googleMapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
+
 const mapLinks = [
   {
     name: "카카오맵",
     mark: "K",
-    href: "https://example.com",
+    href: `https://map.kakao.com/?q=${mapQuery}`,
   },
   {
     name: "네이버 지도",
     mark: "N",
-    href: "https://example.com",
+    href: `https://map.naver.com/p/search/${mapQuery}`,
   },
 ];
 
@@ -98,13 +103,20 @@ export default function SingleDemoPage() {
                     ))}
                   </nav>
                 </div>
-                <p className="location-address-text">연구소는 서울 도심에 자리하고 있습니다</p>
+                <p className="location-address-text">{siteConfig.address}</p>
               </div>
               <p className="location-guide-note">가까운 지하철역에서 도보로 이동하실 수 있습니다. 방문 전에 예약을 부탁드립니다.</p>
             </div>
             <div className="location-photo-grid">
               <div className="location-photo-card location-map-embed-card">
-                <p>지도가 표시되는 자리입니다</p>
+                <iframe
+                  className="location-google-map"
+                  title={`${siteConfig.name} 구글 지도`}
+                  src={googleMapEmbedUrl}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
               </div>
               <figure className="location-photo-card" aria-label="연구소 입구">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

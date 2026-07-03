@@ -845,6 +845,13 @@ main {
   border-radius: 999px;
 }
 
+.location-google-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .lightbox-trigger {
   display: block;
   width: 100%;
