@@ -46,6 +46,8 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt"
   },
+  // 운영에서는 세션 쿠키에 Secure 플래그를 확실히 강제한다(NEXTAUTH_URL 추론에 의존하지 않음).
+  useSecureCookies: env.IS_PRODUCTION,
   providers: buildProviders(),
   pages: {
     signIn: "/signin",

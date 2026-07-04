@@ -403,6 +403,9 @@ export async function createGeneralScheduleAction(formData: FormData) {
   redirectWithMessage("schedule-created");
 }
 
+// 설계 의도: 일정(일반 일정·프로그램 런)은 특정 작성자 소유가 아니라 모든 관리자가 함께
+// 관리하는 "기관 공용 캘린더"다. 그래서 게시물/자료와 달리 수정·삭제에 작성자 소유권 검사를
+// 두지 않는다(authorUserId는 기록용). 하드삭제 등 위험 동작은 여전히 manager 전용이다.
 export async function updateGeneralScheduleAction(formData: FormData) {
   await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");

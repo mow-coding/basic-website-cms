@@ -8,7 +8,7 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' https: blob:",
+  "connect-src 'self' https://*.vercel-storage.com blob:",
   "frame-src 'self'",
   "worker-src 'self' blob:",
   "object-src 'none'",

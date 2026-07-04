@@ -394,7 +394,19 @@ function normalizeLinks(value: unknown) {
       title: typeof item.title === "string" ? item.title : "",
       url: typeof item.url === "string" ? item.url : "",
     }))
-    .filter((item) => item.title && item.url);
+    .filter((item) => item.title && item.url && isSafeLinkUrl(item.url));
+}
+
+// 방문자에게 렌더되는 링크는 http/https/mailto(또는 내부 상대경로)만 허용합니다.
+// 쓰기 경로에서도 스킴을 검증하지만, 읽기 경로에서 한 번 더 막아 javascript: 같은
+// 스킴이 섞여 들어오는 것을 이중으로 차단합니다.
+function isSafeLinkUrl(value: string) {
+  try {
+    const { protocol } = new URL(value, "https://cms.invalid");
+    return protocol === "http:" || protocol === "https:" || protocol === "mailto:";
+  } catch {
+    return false;
+  }
 }
 
 function formatDateTime(value: string) {
