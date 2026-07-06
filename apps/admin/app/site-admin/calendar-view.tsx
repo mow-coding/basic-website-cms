@@ -377,7 +377,12 @@ export function CalendarView({
                   <div className="calendar-grid real-calendar-grid calendar-week-days">
                     {week.map((day, dayIndex) => {
                       const dayEvents = visibleEvents
-                        .filter((event) => !event.isApplication && event.dateKey <= day.key && event.endDateKey >= day.key)
+                        .filter(
+                          (event) =>
+                            !isRangeSegmentEvent(event) &&
+                            event.dateKey <= day.key &&
+                            event.endDateKey >= day.key,
+                        )
                         .sort(sortCalendarEvents);
                       const isSunday = getDateWeekday(day.key) === 0;
                       const officialHolidayLabel = holidayNamesByDate[day.key];
@@ -722,7 +727,7 @@ function buildWeekRangeSegments(events: AdminCalendarEvent[], week: CalendarDay[
   const laneEndIndexes: number[] = [];
 
   return events
-    .filter((event) => event.isApplication && event.dateKey <= weekEndKey && event.endDateKey >= weekStartKey)
+    .filter((event) => isRangeSegmentEvent(event) && event.dateKey <= weekEndKey && event.endDateKey >= weekStartKey)
     .sort(sortCalendarEvents)
     .map((event) => {
       const startIndex = Math.max(
@@ -747,6 +752,10 @@ function buildWeekRangeSegments(events: AdminCalendarEvent[], week: CalendarDay[
         isActualEnd: week[endIndex].key === event.endDateKey,
       };
     });
+}
+
+function isRangeSegmentEvent(event: AdminCalendarEvent) {
+  return event.isApplication || event.dateKey !== event.endDateKey;
 }
 
 function getRangeLaneCount(segments: RangeSegment[]) {
