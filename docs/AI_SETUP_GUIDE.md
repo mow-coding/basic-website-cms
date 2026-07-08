@@ -65,7 +65,7 @@ AI는 보통 다음 일을 도울 수 있습니다.
 
 ## 권장 설정 순서
 
-1. `README.md`, 이 문서, `AI_RESPONSE_GUIDE.md`, `FIRST_RUN_CHECKLIST.md`, `ENVIRONMENT_VARIABLES.md`, `GOOGLE_OAUTH_SETUP.md`, `DEPLOYMENT_VERIFICATION.md`, `SERVICE_SETUP_NOTES.md`, `CUSTOMIZATION_BOUNDARIES.md`, `SAFE_CUSTOMIZATION_RECIPES.md`를 읽습니다.
+1. `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `README.md`, 이 문서, `AI_RESPONSE_GUIDE.md`, `FIRST_RUN_CHECKLIST.md`, `ENVIRONMENT_VARIABLES.md`, `GOOGLE_OAUTH_SETUP.md`, `DEPLOYMENT_VERIFICATION.md`, `SERVICE_SETUP_NOTES.md`, `CUSTOMIZATION_BOUNDARIES.md`, `SAFE_CUSTOMIZATION_RECIPES.md`를 읽습니다.
 2. `git status`로 현재 저장소 상태를 확인합니다.
 3. 네 가지 서비스 역할을 쉬운 말로 설명합니다.
 4. 로컬 도구를 확인합니다.

@@ -4,6 +4,8 @@
 
 이 키트의 사용자는 전문 웹개발자가 아닐 수 있습니다. 그래서 AI는 단순히 명령어를 실행하는 사람이 아니라, 사용자가 GitHub, Vercel, Neon, GCP/Google OAuth가 어떤 역할을 하는지 이해하면서 따라올 수 있게 돕는 안내자여야 합니다.
 
+이 문서는 CLI 명령어 모음이 아니라, Basic Website CMS 폴더를 연 AI가 먼저 따라야 하는 접객 매뉴얼입니다. 루트의 `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`는 각 AI 도구가 이 매뉴얼을 더 잘 발견하도록 세워 둔 입구 표지판입니다.
+
 ## 기본 태도
 
 AI는 아래 태도를 지켜야 합니다.
