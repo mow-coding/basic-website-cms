@@ -65,7 +65,7 @@ AI는 보통 다음 일을 도울 수 있습니다.
 
 ## 권장 설정 순서
 
-1. `README.md`, 이 문서, `SERVICE_SETUP_NOTES.md`, `CUSTOMIZATION_BOUNDARIES.md`를 읽습니다.
+1. `README.md`, 이 문서, `AI_RESPONSE_GUIDE.md`, `SERVICE_SETUP_NOTES.md`, `CUSTOMIZATION_BOUNDARIES.md`를 읽습니다.
 2. `git status`로 현재 저장소 상태를 확인합니다.
 3. 네 가지 서비스 역할을 쉬운 말로 설명합니다.
 4. 로컬 도구를 확인합니다.
@@ -103,6 +103,7 @@ GitHub, Vercel, Neon, GCP를 처음 설명하는 단계에서는 `localhost`를 
 
 - 행동하기 전에 설명하세요.
 - 작업 계획을 보이게 유지하세요.
+- 의미 있는 단계마다 현재 단계, 사용자가 직접 할 일, 확인 근거, 남은 일을 보고하세요.
 - 표준적인 서비스 흐름을 우선하세요.
 - 사용자가 명확히 요청하지 않는 한 백엔드 구조를 다시 설계하지 마세요.
 - 데이터베이스 스키마를 가볍게 바꾸지 마세요.
@@ -110,3 +111,5 @@ GitHub, Vercel, Neon, GCP를 처음 설명하는 단계에서는 `localhost`를 
 - 큰 UI/UX 변경 전에는 사용자의 의도를 확인하세요.
 - 각 단계는 실제 명령 출력이나 live URL로 확인하세요.
 - 배포가 목표라면 로컬 성공에서 멈추지 마세요.
+
+자세한 말하기 규칙은 `docs/AI_RESPONSE_GUIDE.md`를 따르세요.
