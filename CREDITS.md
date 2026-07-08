@@ -1,8 +1,8 @@
 # Credits
 
-## Demo images
+## Starter images
 
-The placeholder photography in the public site demo (`apps/site/public/`) is
+The placeholder photography in the public site starter (`apps/site/public/`) is
 sourced from [Unsplash](https://unsplash.com) under the
 [Unsplash License](https://unsplash.com/license) (free to use, no attribution
 required). Replace these with your own imagery when adapting the template.
@@ -19,6 +19,6 @@ required). Replace these with your own imagery when adapting the template.
 
 The MOW logo and icon set (`favicon.png`, `icon.png`, `apple-icon.png`,
 `brand-icon-deep.png`, `og-image.png`) are project marks for the fictional
-demo tenant. The Kakao / Naver / Google map service icons in
+starter tenant. The Kakao / Naver / Google map service icons in
 `public/map-icons/` are third-party service marks used only to label
 directions links.

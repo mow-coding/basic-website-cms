@@ -14,7 +14,7 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "seed": "node scripts/seed-site-admin.mjs",
-    "seed:demo": "node scripts/seed-demo-content.mjs"
+    "seed:sample": "node scripts/seed-sample-content.mjs"
   },
   "dependencies": {
     "@hyunbinseo/holidays-kr": "^4.2026.0",

@@ -16,6 +16,6 @@
     "admin:db:generate": "npm --prefix apps/admin run db:generate",
     "admin:db:push": "npm --prefix apps/admin run db:push",
     "admin:seed": "npm --prefix apps/admin run seed",
-    "admin:seed:demo": "npm --prefix apps/admin run seed:demo"
+    "admin:seed:sample": "npm --prefix apps/admin run seed:sample"
   }
 }

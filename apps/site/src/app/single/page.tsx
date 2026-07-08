@@ -28,7 +28,7 @@ const mapLinks = [
   },
 ];
 
-export default function SingleDemoPage() {
+export default function SinglePage() {
   return (
     <>
       <section className="page-hero">

@@ -65,7 +65,7 @@ AI는 보통 다음 일을 도울 수 있습니다.
 
 ## 권장 설정 순서
 
-1. `README.md`, 이 문서, `AI_RESPONSE_GUIDE.md`, `SERVICE_SETUP_NOTES.md`, `CUSTOMIZATION_BOUNDARIES.md`를 읽습니다.
+1. `README.md`, 이 문서, `AI_RESPONSE_GUIDE.md`, `FIRST_RUN_CHECKLIST.md`, `ENVIRONMENT_VARIABLES.md`, `GOOGLE_OAUTH_SETUP.md`, `DEPLOYMENT_VERIFICATION.md`, `SERVICE_SETUP_NOTES.md`, `CUSTOMIZATION_BOUNDARIES.md`, `SAFE_CUSTOMIZATION_RECIPES.md`를 읽습니다.
 2. `git status`로 현재 저장소 상태를 확인합니다.
 3. 네 가지 서비스 역할을 쉬운 말로 설명합니다.
 4. 로컬 도구를 확인합니다.
@@ -88,6 +88,14 @@ AI는 보통 다음 일을 도울 수 있습니다.
 10. Vercel production 환경변수를 채웁니다.
 11. 배포하고 실제 URL을 확인합니다.
 12. 그 다음 커스터마이즈를 시작합니다.
+
+각 단계의 자세한 체크리스트는 아래 문서를 따르세요.
+
+- `docs/FIRST_RUN_CHECKLIST.md`
+- `docs/ENVIRONMENT_VARIABLES.md`
+- `docs/GOOGLE_OAUTH_SETUP.md`
+- `docs/DEPLOYMENT_VERIFICATION.md`
+- `docs/SAFE_CUSTOMIZATION_RECIPES.md`
 
 ## localhost 설명은 로컬 실행 단계에서만
 

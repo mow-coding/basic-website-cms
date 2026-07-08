@@ -315,69 +315,34 @@ code {
   box-shadow: 0 1px 2px rgb(60 64 67 / 18%);
 }
 
-.signin-button-stack {
+.signin-setup-required {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.demo-signin-button {
-  color: #2a5f7f;
-  border-color: rgb(42 95 127 / 45%);
-  border-style: dashed;
-  font-weight: 600;
-}
-
-.demo-signin-button:hover:not(:disabled) {
-  background: rgb(42 95 127 / 6%);
-  border-color: #2a5f7f;
-  box-shadow: none;
-}
-
-.signin-demo-notice {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.55rem;
   width: 100%;
   text-align: left;
 }
 
-.signin-demo-notice-title {
+.signin-setup-required-title {
   margin: 0;
   color: #1f2d3a;
   font-size: 1rem;
   font-weight: 700;
 }
 
-.signin-demo-notice-body {
+.signin-setup-required-body {
   margin: 0;
   color: #4a5b6a;
   font-size: 0.9rem;
   line-height: 1.55;
 }
 
-.signin-demo-notice-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.2rem;
-}
-
-.signin-demo-notice-cancel {
-  align-self: center;
-  padding: 0.35rem 0.6rem;
-  color: #5f6b77;
-  font: inherit;
-  font-size: 0.85rem;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-}
-
-.signin-demo-notice-cancel:hover:not(:disabled) {
-  color: #2a5f7f;
-  text-decoration: underline;
+.signin-setup-required code {
+  padding: 0.08rem 0.24rem;
+  color: #1f2d3a;
+  background: rgb(42 95 127 / 8%);
+  border-radius: 4px;
+  font-size: 0.82rem;
 }
 
 .google-signin-button:active:not(:disabled) {

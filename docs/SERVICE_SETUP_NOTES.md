@@ -27,6 +27,8 @@ AI가 도울 수 있는 일:
 - 새 저장소 만들기 또는 이 저장소 복사하기
 - 커스터마이즈한 프로젝트를 GitHub에 push하기
 
+처음 진행 순서는 [첫 실행 체크리스트](FIRST_RUN_CHECKLIST.md)를 따르세요.
+
 ## Vercel: 포장·배송 센터
 
 Vercel은 코드를 사람들이 방문할 수 있는 웹사이트로 바꿔줍니다.
@@ -49,6 +51,8 @@ AI가 도울 수 있는 일:
 - `apps/admin`용 Vercel 프로젝트 만들기
 - 환경변수 추가하기
 - 배포 상태와 production URL 확인하기
+
+환경변수는 [환경변수 안내](ENVIRONMENT_VARIABLES.md)를 따르고, 배포 후에는 [배포 검증 체크리스트](DEPLOYMENT_VERIFICATION.md)를 따르세요.
 
 중요한 설정:
 
@@ -83,6 +87,8 @@ AI가 도울 수 있는 일:
 - Prisma 설정 명령 실행
 
 `DATABASE_URL`은 절대 공개하면 안 됩니다. 데이터베이스에 접근할 수 있는 정보가 들어 있습니다.
+
+Neon 연결 문자열을 고를 때는 [환경변수 안내](ENVIRONMENT_VARIABLES.md)의 Neon 연결 문자열 선택 섹션을 따르세요.
 
 ## GCP / Google OAuth: 관리자 출입증 발급소
 
@@ -127,6 +133,8 @@ https://YOUR_ADMIN_DOMAIN
 
 - 로컬 개발: `apps/admin/.env.local`
 - 배포 환경: Vercel environment variables
+
+화면별 자세한 절차는 [Google OAuth 설정](GOOGLE_OAUTH_SETUP.md)을 따르세요.
 
 ## 환경변수
 

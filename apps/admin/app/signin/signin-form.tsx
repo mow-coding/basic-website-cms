@@ -5,7 +5,6 @@ import { signIn } from "next-auth/react";
 
 type SignInFormProps = {
   googleEnabled: boolean;
-  demoEnabled: boolean;
 };
 
 function GoogleIcon() {
@@ -28,16 +27,11 @@ function GoogleIcon() {
   );
 }
 
-export default function SignInForm({ googleEnabled, demoEnabled }: SignInFormProps) {
+export default function SignInForm({ googleEnabled }: SignInFormProps) {
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [demoLoading, setDemoLoading] = useState(false);
-  const [demoNoticeOpen, setDemoNoticeOpen] = useState(false);
-
-  // 데모 전용(공개 "모델하우스") 모드: 실제 Google 자격증명 없이 데모 로그인만 열린 상태.
-  const demoOnlyMode = demoEnabled && !googleEnabled;
 
   function onGoogleSignIn() {
-    if (googleLoading || demoLoading) {
+    if (googleLoading) {
       return;
     }
 
@@ -50,89 +44,21 @@ export default function SignInForm({ googleEnabled, demoEnabled }: SignInFormPro
     });
   }
 
-  function startDemo() {
-    if (demoLoading) {
-      return;
-    }
-
-    setDemoLoading(true);
-
-    void signIn("demo", {
-      callbackUrl: "/site-admin"
-    }).catch(() => {
-      setDemoLoading(false);
-    });
-  }
-
-  if (!googleEnabled && !demoEnabled) {
+  if (!googleEnabled) {
     return (
-      <p className="error-text" role="alert">
-        Google 로그인을 사용할 수 없습니다.
-      </p>
-    );
-  }
-
-  // 모델하우스: Google 버튼과 똑같이 생긴 버튼 → 실제 Google 대신 데모 안내 → 입장.
-  if (demoOnlyMode) {
-    if (demoNoticeOpen) {
-      return (
-        <div className="signin-demo-notice" role="dialog" aria-label="데모 로그인 안내">
-          <p className="signin-demo-notice-title">잠깐, 여기는 데모 화면입니다</p>
-          <p className="signin-demo-notice-body">
-            실제 Google 로그인 대신 데모 관리자 계정으로 입장합니다. 자유롭게 둘러보세요. 변경 사항은 저장되지 않습니다.
-          </p>
-          <div className="signin-demo-notice-actions">
-            <button
-              className="google-signin-button"
-              type="button"
-              disabled={demoLoading}
-              aria-busy={demoLoading}
-              onClick={startDemo}
-            >
-              <span>{demoLoading ? "입장 중..." : "둘러보기 시작"}</span>
-            </button>
-            <button
-              className="signin-demo-notice-cancel"
-              type="button"
-              disabled={demoLoading}
-              onClick={() => setDemoNoticeOpen(false)}
-            >
-              돌아가기
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <button className="google-signin-button" type="button" onClick={() => setDemoNoticeOpen(true)}>
-        <span className="google-signin-icon-box">
-          <GoogleIcon />
-        </span>
-        <span>Google 계정으로 로그인</span>
-      </button>
+      <div className="signin-setup-required" role="alert">
+        <p className="signin-setup-required-title">Google OAuth 설정이 아직 완료되지 않았습니다.</p>
+        <p className="signin-setup-required-body">
+          <code>docs/GOOGLE_OAUTH_SETUP.md</code>에 따라 Client ID와 Client Secret을 설정한 뒤 다시 실행해 주세요.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="signin-button-stack">
-      {googleEnabled ? (
-        <button className="google-signin-button" type="button" disabled={googleLoading} aria-busy={googleLoading} onClick={onGoogleSignIn}>
-          <span className="google-signin-icon-box">{googleLoading ? <span className="google-signin-spinner" aria-hidden="true" /> : <GoogleIcon />}</span>
-          <span>{googleLoading ? "로그인 화면으로 이동 중..." : "Google 계정으로 로그인"}</span>
-        </button>
-      ) : null}
-      {demoEnabled ? (
-        <button
-          className="google-signin-button demo-signin-button"
-          type="button"
-          disabled={demoLoading}
-          aria-busy={demoLoading}
-          onClick={startDemo}
-        >
-          <span>{demoLoading ? "데모 계정으로 입장 중..." : "데모 계정으로 로그인 (개발 모드)"}</span>
-        </button>
-      ) : null}
-    </div>
+    <button className="google-signin-button" type="button" disabled={googleLoading} aria-busy={googleLoading} onClick={onGoogleSignIn}>
+      <span className="google-signin-icon-box">{googleLoading ? <span className="google-signin-spinner" aria-hidden="true" /> : <GoogleIcon />}</span>
+      <span>{googleLoading ? "로그인 화면으로 이동 중..." : "Google 계정으로 로그인"}</span>
+    </button>
   );
 }

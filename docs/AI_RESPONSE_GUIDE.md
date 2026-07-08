@@ -45,6 +45,8 @@ AI가 확인하거나 실행할 수 있는 일을 적습니다.
 
 항상 길게 쓸 필요는 없습니다. 하지만 사용자가 헷갈릴 수 있는 단계에서는 이 구조를 줄여서라도 유지하세요.
 
+실제 설치와 배포 단계에서는 `docs/FIRST_RUN_CHECKLIST.md`, `docs/ENVIRONMENT_VARIABLES.md`, `docs/GOOGLE_OAUTH_SETUP.md`, `docs/DEPLOYMENT_VERIFICATION.md`를 함께 보며 보고하세요.
+
 ## 네 가지 서비스 설명 순서
 
 처음 설정을 시작할 때는 명령어보다 먼저 네 가지 부품을 설명하세요.

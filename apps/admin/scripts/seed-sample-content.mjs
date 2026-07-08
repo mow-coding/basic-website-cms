@@ -9,7 +9,7 @@ const editorOneEmail = "editor-one@example.com";
 // 세계를 재현합니다. 순서·제목·카테고리·라벨·작성자·본문 문안이 1:1로 대응합니다.
 // (site-data 카테고리 매핑: 전체 공지=GENERAL · 안내=COUNSELING · 자유게시판=GREEN_BOARD ·
 //  자료실=RESOURCE. site-data body[] 각 문단 = 여기 <p>…</p> 한 개.)
-const demoPosts = [
+const samplePosts = [
   {
     title: "2026년 상반기 상담·검사 운영 시간 안내",
     category: "GENERAL",
@@ -321,9 +321,9 @@ const demoPosts = [
   }
 ];
 
-// 캘린더를 조밀하게 채울 고정 연도 범위. 사이트 폴백(site-data.ts)의 DEMO_YEARS와
+// 캘린더를 조밀하게 채울 고정 연도 범위. 사이트 폴백(site-data.ts)의 SAMPLE_YEARS와
 // 반드시 동일해야 합니다.
-const DEMO_YEARS = [2026, 2027, 2028, 2029, 2030];
+const SAMPLE_YEARS = [2026, 2027, 2028, 2029, 2030];
 
 const SEOUL_UTC_OFFSET_MINUTES = 9 * 60;
 
@@ -354,7 +354,7 @@ async function upsertUser(email, displayName) {
 async function seedPosts(usersByEmail) {
   let created = 0;
 
-  for (const post of demoPosts) {
+  for (const post of samplePosts) {
     const existing = await prisma.sitePost.findFirst({
       where: { title: post.title, category: post.category }
     });
@@ -481,8 +481,8 @@ const generalScheduleTemplates = [
   }
 ];
 
-// DEMO_YEARS × 템플릿을 고정 날짜로 펼쳐 (연도별로 제목을 붙인) 일반 일정 목록을 만듭니다.
-const demoGeneralSchedules = DEMO_YEARS.flatMap((year) =>
+// SAMPLE_YEARS × 템플릿을 고정 날짜로 펼쳐 (연도별로 제목을 붙인) 일반 일정 목록을 만듭니다.
+const sampleGeneralSchedules = SAMPLE_YEARS.flatMap((year) =>
   generalScheduleTemplates.map((template) => ({
     title: `${year} ${template.title}`,
     description: template.description,
@@ -494,7 +494,7 @@ const demoGeneralSchedules = DEMO_YEARS.flatMap((year) =>
 async function seedGeneralSchedules(usersByEmail) {
   let created = 0;
 
-  for (const schedule of demoGeneralSchedules) {
+  for (const schedule of sampleGeneralSchedules) {
     const existing = await prisma.generalSchedule.findFirst({ where: { title: schedule.title } });
     if (existing) {
       continue;
@@ -518,7 +518,7 @@ async function seedGeneralSchedules(usersByEmail) {
 
 // 프로그램 런 템플릿: (workshopSlug, runNumber)마다 신청 월/일과 단계별 세션 월/일·시간을
 // 고정합니다. site-data.ts의 WORKSHOP_RUN_TEMPLATES와 반드시 동일해야 합니다.
-// DEMO_YEARS의 각 연도에 대해 같은 월/일로 런을 생성합니다. runNumber는
+// SAMPLE_YEARS의 각 연도에 대해 같은 월/일로 런을 생성합니다. runNumber는
 // (workshopSlug, year) 안에서 부여되며 @@unique(workshopSlug, year, runNumber)와 충돌하지 않습니다.
 const workshopRunTemplates = [
   // ---- 프로그램 A(입문): 연 3기(겨울·봄·가을), 각 1단계 2세션. ----
@@ -743,8 +743,8 @@ const workshopRunTemplates = [
   }
 ];
 
-// DEMO_YEARS × 템플릿을 고정 날짜로 펼친 런 목록.
-const demoWorkshopRuns = DEMO_YEARS.flatMap((year) =>
+// SAMPLE_YEARS × 템플릿을 고정 날짜로 펼친 런 목록.
+const sampleWorkshopRuns = SAMPLE_YEARS.flatMap((year) =>
   workshopRunTemplates.map((template) => ({
     workshopSlug: template.workshopSlug,
     year,
@@ -767,7 +767,7 @@ const demoWorkshopRuns = DEMO_YEARS.flatMap((year) =>
 async function seedWorkshopRuns(usersByEmail) {
   let createdStages = 0;
 
-  for (const runConfig of demoWorkshopRuns) {
+  for (const runConfig of sampleWorkshopRuns) {
     const run = await prisma.workshopRun.upsert({
       where: {
         workshopSlug_year_runNumber: {
@@ -831,7 +831,7 @@ async function main() {
   const createdStages = await seedWorkshopRuns(usersByEmail);
 
   console.log(
-    `Seeded demo content: ${createdPosts} posts, ${createdSchedules} general schedules, ${createdStages} workshop stages (existing items were kept).`
+    `Seeded sample content: ${createdPosts} posts, ${createdSchedules} general schedules, ${createdStages} workshop stages (existing items were kept).`
   );
 }
 

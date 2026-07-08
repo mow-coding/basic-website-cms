@@ -150,7 +150,7 @@ export const workshops: Array<{
   },
 ];
 
-// 캐노니컬 데모 게시물. 어드민 시드(seed-demo-content.mjs)의 demoPosts와 "완전히 동일한"
+// 캐노니컬 샘플 게시물. 어드민 시드(seed-sample-content.mjs)의 samplePosts와 "완전히 동일한"
 // 세계를 정적 폴백으로 재현합니다. 각 게시물의 문단(body[])은 시드의 <p>…</p> HTML과
 // 문안이 100% 일치하며, 순서·제목·카테고리·라벨·작성자·후기 여부까지 1:1 대응합니다.
 // 자료실(RESOURCE) 게시물은 relatedLinks(https://example.com/resource)를 포함하고,
@@ -745,9 +745,9 @@ export const researchSurveyHref = "https://github.com/mow-coding/basic-website-c
 // ---------------------------------------------------------------------------
 // 정적 폴백 캘린더 데이터 (SITE_ADMIN_API_URL 미설정 시 사용)
 //
-// 어드민 시드(seed-demo-content.mjs)와 "완전히 동일한" 캐노니컬 일정/런을 재현합니다.
+// 어드민 시드(seed-sample-content.mjs)와 "완전히 동일한" 캐노니컬 일정/런을 재현합니다.
 // 날짜는 상대 오프셋이 아니라 2026~2030 고정 연·월·일이므로, 몇 년 뒤 어느 달을 방문해도
-// 캘린더에 일정이 보입니다. 두 파일은 아래 DEMO_YEARS 범위와 동일한 "템플릿 상수"
+// 캘린더에 일정이 보입니다. 두 파일은 아래 SAMPLE_YEARS 범위와 동일한 "템플릿 상수"
 // (GENERAL_SCHEDULE_TEMPLATES / WORKSHOP_RUN_TEMPLATES)를 공유하며, 각자 같은 루프로
 // 같은 고정 날짜를 생성합니다. 상수가 같으면 출력이 같습니다.
 // 아래 두 빌더는 public-site-content.ts의 getFallbackContent에서
@@ -756,8 +756,8 @@ export const researchSurveyHref = "https://github.com/mow-coding/basic-website-c
 
 const SEOUL_UTC_OFFSET_MINUTES = 9 * 60;
 
-// 캘린더를 조밀하게 채울 고정 연도 범위. 시드(seed-demo-content.mjs)와 반드시 동일해야 합니다.
-export const DEMO_YEARS = [2026, 2027, 2028, 2029, 2030] as const;
+// 캘린더를 조밀하게 채울 고정 연도 범위. 시드(seed-sample-content.mjs)와 반드시 동일해야 합니다.
+export const SAMPLE_YEARS = [2026, 2027, 2028, 2029, 2030] as const;
 
 // (연, 월, 일, 시, 분) 서울 벽시계 시각에 해당하는 UTC 인스턴트를 만듭니다.
 // UTC = 서울시각 - 9h.
@@ -891,7 +891,7 @@ export const GENERAL_SCHEDULE_TEMPLATES: GeneralScheduleTemplate[] = [
   },
 ];
 
-// PublicGeneralSchedule[] 형태로 반환합니다. DEMO_YEARS × 템플릿을 고정 날짜로 펼칩니다.
+// PublicGeneralSchedule[] 형태로 반환합니다. SAMPLE_YEARS × 템플릿을 고정 날짜로 펼칩니다.
 export function buildFallbackGeneralSchedules() {
   const nowIso = new Date().toISOString();
   const schedules: Array<{
@@ -904,7 +904,7 @@ export function buildFallbackGeneralSchedules() {
     updatedAt: string;
   }> = [];
 
-  for (const year of DEMO_YEARS) {
+  for (const year of SAMPLE_YEARS) {
     for (const template of GENERAL_SCHEDULE_TEMPLATES) {
       schedules.push({
         id: `general-${year}-${template.key}`,
@@ -923,7 +923,7 @@ export function buildFallbackGeneralSchedules() {
 
 // ---------------------------------------------------------------------------
 // 프로그램 런 템플릿: (workshopSlug, runNumber)마다 신청 월/일과 단계별 세션 월/일·시간을
-// 고정합니다. DEMO_YEARS의 각 연도에 대해 동일한 월/일로 런을 생성합니다.
+// 고정합니다. SAMPLE_YEARS의 각 연도에 대해 동일한 월/일로 런을 생성합니다.
 // runNumber는 (workshopSlug, year) 안에서 1부터 부여되며, seed의
 // @@unique(workshopSlug, year, runNumber)와 충돌하지 않습니다.
 type WorkshopSessionTemplate = { month: number; day: number; startTime: string; endTime: string };
@@ -1165,12 +1165,12 @@ export const WORKSHOP_RUN_TEMPLATES: WorkshopRunTemplate[] = [
 ];
 
 // PublicWorkshopRun[] 형태로 반환합니다. runLabel은 캘린더가 규칙대로 생성하도록 비웁니다.
-// DEMO_YEARS × 템플릿을 고정 날짜로 펼칩니다.
+// SAMPLE_YEARS × 템플릿을 고정 날짜로 펼칩니다.
 export function buildFallbackWorkshopRuns() {
   const nowIso = new Date().toISOString();
   const runs: ReturnType<typeof buildOneFallbackRun>[] = [];
 
-  for (const year of DEMO_YEARS) {
+  for (const year of SAMPLE_YEARS) {
     for (const template of WORKSHOP_RUN_TEMPLATES) {
       runs.push(buildOneFallbackRun(template, year, nowIso));
     }
