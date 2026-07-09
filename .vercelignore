@@ -1,0 +1,19 @@
+# Keep local secrets out of Vercel CLI deployment archives.
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Keep generated and local-only folders out of uploads.
+.git
+node_modules
+**/node_modules
+.next
+**/.next
+out
+**/out
+
+# Local AI/editor state.
+.claude
+.codex
+.agents
