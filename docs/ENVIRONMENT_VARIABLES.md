@@ -34,8 +34,8 @@ apps/admin/.env.local
 | `DATABASE_URL` | 예 | Neon direct connection string | Neon pooled 또는 direct connection string | Neon Console 또는 Neon CLI | 관리자 콘텐츠가 저장되는 PostgreSQL 연결 문자열입니다. |
 | `NEXTAUTH_URL` | 아니오 | `http://localhost:3001` | `https://YOUR_ADMIN_DOMAIN` | 관리자 앱 주소 | Google 로그인 후 돌아올 관리자 앱의 기준 주소입니다. |
 | `NEXTAUTH_SECRET` | 예 | 무작위 긴 문자열 | 무작위 긴 문자열 | 직접 생성 | 로그인 세션을 보호하는 열쇠값입니다. |
-| `GOOGLE_OAUTH_CLIENT_ID` | 부분 공개 가능 | Google Client ID | Google Client ID | Google Cloud Console | Google이 발급한 관리자 출입증의 공개 식별자입니다. |
-| `GOOGLE_OAUTH_CLIENT_SECRET` | 예 | Google Client Secret | Google Client Secret | Google Cloud Console | Google OAuth의 비밀 열쇠입니다. 채팅에 붙여넣지 않습니다. |
+| `GOOGLE_OAUTH_CLIENT_ID` | 부분 공개 가능 | Google Client ID | Google Client ID | Google Cloud Console | Google이 발급한 관리자 출입증의 공개 식별자입니다. 없으면 관리자 로그인 대신 설정 필요 안내가 보입니다. |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | 예 | Google Client Secret | Google Client Secret | Google Cloud Console | Google OAuth의 비밀 열쇠입니다. 없으면 관리자 로그인 대신 설정 필요 안내가 보입니다. 채팅에 붙여넣지 않습니다. |
 | `BLOB_READ_WRITE_TOKEN` | 예 | Vercel Blob token | Vercel Blob token | Vercel Storage | 첨부파일 업로드를 쓸 때 필요합니다. |
 | `NEXT_PUBLIC_SITE_URL` | 아니오 | `http://localhost:3000` | `https://YOUR_SITE_DOMAIN` | 공개 사이트 주소 | 관리자 화면에서 공개 사이트 미리보기 링크를 만들 때 씁니다. |
 | `SITE_REVALIDATE_URL` | 아니오 | `http://localhost:3000/api/revalidate` | `https://YOUR_SITE_DOMAIN/api/revalidate` | 공개 사이트 주소 | 관리자가 저장한 뒤 공개 사이트 캐시를 새로고침할 주소입니다. |
@@ -110,12 +110,17 @@ Vercel apps/site project
 DATABASE_URL
 NEXTAUTH_URL
 NEXTAUTH_SECRET
-GOOGLE_OAUTH_CLIENT_ID
-GOOGLE_OAUTH_CLIENT_SECRET
 BLOB_READ_WRITE_TOKEN
 NEXT_PUBLIC_SITE_URL
 SITE_REVALIDATE_URL
 SITE_REVALIDATE_SECRET
+```
+
+관리자 콘솔은 Google OAuth 값이 없어도 배포 자체는 가능합니다. 이 경우 `/signin` 화면은 Google 로그인 버튼 대신 설정 필요 안내를 보여줍니다. 실제 관리자 로그인을 완성하려면 아래 값도 Vercel `apps/admin` 프로젝트에 추가해야 합니다.
+
+```text
+GOOGLE_OAUTH_CLIENT_ID
+GOOGLE_OAUTH_CLIENT_SECRET
 ```
 
 공개 사이트 프로젝트 (`apps/site`):
@@ -146,4 +151,3 @@ DATABASE_URL 값을 여기에 보내 주세요. 제가 넣겠습니다.
 ```
 
 비밀값을 다룰 때 AI는 값 자체를 보지 않아도 됩니다. 사용자가 값을 넣은 뒤, AI는 앱 실행이나 배포 결과로 연결이 맞는지 확인하면 됩니다.
-

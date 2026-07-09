@@ -160,7 +160,7 @@ npm run site:dev
 
 ## 8. Google OAuth 준비
 
-관리자 로그인을 확인하려면 Google OAuth를 먼저 설정합니다. 공개 스타터는 우회 로그인으로 관리자 콘솔을 열지 않습니다.
+관리자 앱은 Google OAuth 설정 전에도 배포할 수 있습니다. 이때 로그인 화면에는 설정 필요 안내가 보입니다. 실제 관리자 로그인을 확인하려면 Google OAuth를 먼저 설정합니다. 공개 스타터는 우회 로그인으로 관리자 콘솔을 열지 않습니다.
 
 자세한 단계는 [Google OAuth 설정](GOOGLE_OAUTH_SETUP.md)을 따릅니다.
 

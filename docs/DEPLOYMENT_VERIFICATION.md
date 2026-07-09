@@ -74,9 +74,9 @@ https://YOUR_ADMIN_DOMAIN/signin
 성공 기준:
 
 - HTTP 200으로 열립니다.
-- Google 로그인 버튼이 보입니다.
-- Google OAuth 설정이 완료되어 있어야 관리자 로그인을 시작할 수 있습니다.
-- 버튼을 누르면 Google 로그인 화면으로 이동합니다.
+- Google OAuth 설정 전이면 설정 필요 안내가 보입니다.
+- Google OAuth 설정 후이면 Google 로그인 버튼이 보입니다.
+- Google OAuth 설정 후 버튼을 누르면 Google 로그인 화면으로 이동합니다.
 
 ## 5. Google OAuth 확인
 

@@ -35,11 +35,7 @@ const raw = envSchema.parse({
   SITE_REVALIDATE_SECRET: process.env.SITE_REVALIDATE_SECRET
 });
 
-const requiredProductionEnvKeys = [
-  "NEXTAUTH_SECRET",
-  "GOOGLE_OAUTH_CLIENT_ID",
-  "GOOGLE_OAUTH_CLIENT_SECRET"
-] as const;
+const requiredProductionEnvKeys = ["NEXTAUTH_SECRET"] as const;
 
 if (raw.NODE_ENV === "production") {
   for (const key of requiredProductionEnvKeys) {
