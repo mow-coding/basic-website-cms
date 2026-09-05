@@ -7,9 +7,9 @@ import { resolveUploadPolicy, SiteAdminUploadPolicyError } from "@/lib/site-admi
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as HandleUploadBody;
-    const blobToken = env.BLOB_READ_WRITE_TOKEN?.trim();
-    if (!blobToken) {
-      throw new Error("Vercel Blob upload token is not configured.");
+    const blobToken = env.PRIVATE_BLOB_READ_WRITE_TOKEN?.trim();
+    if (!blobToken || !env.PRIVATE_BLOB_HOST?.endsWith(".private.blob.vercel-storage.com")) {
+      throw new Error("Private Blob storage is not configured.");
     }
 
     const response = await handleUpload({

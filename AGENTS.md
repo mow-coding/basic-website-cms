@@ -18,6 +18,7 @@ Before setup, deployment, debugging, or customization work, read these files:
 8. `docs/SERVICE_SETUP_NOTES.md`
 9. `docs/CUSTOMIZATION_BOUNDARIES.md`
 10. `docs/SAFE_CUSTOMIZATION_RECIPES.md`
+11. `docs/SECURITY_OPERATIONS.md`
 
 If the user is just beginning, first explain the kit in plain language before running setup commands.
 

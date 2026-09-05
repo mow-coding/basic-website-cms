@@ -126,7 +126,7 @@ const richTextClasses = [
   "rt-tracking-wide"
 ];
 
-export function sanitizePostBody(html: string) {
+export function sanitizePostBody(html: string, imageSource?: (src: string) => string) {
   return sanitizeHtml(html, {
     allowedTags: [
       "p",
@@ -242,6 +242,10 @@ export function sanitizePostBody(html: string) {
       img: ["http", "https"]
     },
     transformTags: {
+      img: (tagName, attribs) => ({
+        tagName,
+        attribs: { ...attribs, ...(attribs.src && imageSource ? { src: imageSource(attribs.src) } : {}) }
+      }),
       a: sanitizeHtml.simpleTransform("a", {
         rel: "noreferrer",
         target: "_blank"

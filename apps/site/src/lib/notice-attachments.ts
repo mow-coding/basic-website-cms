@@ -3,14 +3,14 @@ export type NoticeAttachmentLink = {
   url: string;
 };
 
-export function getAttachmentHref(item: NoticeAttachmentLink) {
+export function getAttachmentHref(item: NoticeAttachmentLink, postId: string) {
   if (!isVercelBlobAttachmentUrl(item.url)) {
     return item.url;
   }
 
   const params = new URLSearchParams({
     url: item.url,
-    filename: item.title
+    postId
   });
 
   return `/api/attachments/download?${params.toString()}`;
@@ -21,7 +21,8 @@ function isVercelBlobAttachmentUrl(value: string) {
     const url = new URL(value);
     return (
       url.protocol === "https:" &&
-      url.hostname.endsWith(".public.blob.vercel-storage.com") &&
+      (url.hostname.endsWith(".public.blob.vercel-storage.com") ||
+        url.hostname.endsWith(".private.blob.vercel-storage.com")) &&
       url.pathname.startsWith("/site-attachments/")
     );
   } catch {

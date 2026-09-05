@@ -138,6 +138,12 @@ Vercel에서는 같은 GitHub 저장소에서 프로젝트를 두 개 만듭니�
 
 공개 사이트는 관리자 콘솔의 공개 API에서 콘텐츠를 읽습니다. 관리자 콘솔은 Neon PostgreSQL 데이터베이스를 사용하고, Google OAuth로 관리자 로그인을 보호합니다.
 
+## 파일 보안
+
+첨부파일과 본문 이미지는 Vercel의 Private Blob에 보관합니다.
+처음 설정하거나 기존 설치를 업데이트할 때는 [안전한 파일 보관 안내](docs/SECURITY_OPERATIONS.md)를 함께 읽어 주세요.
+공개 저장소의 개인정보 실수를 확인하려면 `node scripts/check-public-privacy.mjs`를 실행합니다.
+
 ## 라이선스
 
 MIT

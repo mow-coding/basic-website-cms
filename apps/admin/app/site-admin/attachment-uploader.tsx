@@ -1,6 +1,7 @@
 "use client";
 
 import { upload } from "@vercel/blob/client";
+import { getAdminFileHref } from "@/lib/site-admin/file-links";
 import { useRef, useState, useTransition } from "react";
 import { HelpTooltip } from "@/app/site-admin/help-tooltip";
 
@@ -94,7 +95,7 @@ export function AttachmentUploader({ defaultValue = "", maxFiles = defaultMaxFil
           <ul className="attachment-item-list">
             {attachments.map((attachment) => (
               <li className="attachment-item-row" key={attachment.url}>
-                <a href={attachment.url} target="_blank" rel="noreferrer">
+                <a href={getAdminFileHref(attachment.url)} target="_blank" rel="noreferrer">
                   {attachment.title}
                 </a>
                 <button
@@ -144,7 +145,7 @@ export function AttachmentUploader({ defaultValue = "", maxFiles = defaultMaxFil
       const uploaded = await Promise.all(
         files.map(async (file) => {
           const blob = await upload(`site-attachments/${sanitizeFileName(file.name)}`, file, {
-            access: "public",
+            access: "private",
             handleUploadUrl: "/api/site-admin/blob-upload"
           });
 

@@ -1,7 +1,7 @@
 import { sanitizePostBody } from "@/lib/site-admin/sanitize";
 
-export function sanitizePublicPostBody(body: string) {
-  return removeNeutralPasteBackgrounds(sanitizePostBody(body));
+export function sanitizePublicPostBody(body: string, imageSource?: (src: string) => string) {
+  return removeNeutralPasteBackgrounds(sanitizePostBody(body, imageSource));
 }
 
 function removeNeutralPasteBackgrounds(html: string) {

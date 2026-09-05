@@ -6,6 +6,7 @@ import {
   workshopLabelToSlug
 } from "@/lib/site-admin/constants";
 import { sanitizePublicPostBody } from "@/lib/site-admin/public-content-sanitize";
+import { publicImageSource } from "@/lib/site-admin/public-media";
 import { getWorkshopShortName } from "@/lib/site-admin/workshop-stage-presets";
 
 type PublicWorkshopStatus = "OPEN" | "CLOSED" | "ENDED" | "NO_SCHEDULE";
@@ -66,12 +67,18 @@ export async function getPublicSiteContent(options: PublicSiteContentOptions = {
   const includeNotices = options.includeNotices !== false;
   const includeNoticeBodies = options.includeNoticeBodies !== false;
   const noticeWhere = getPublicNoticeWhere(options);
-  const [posts, legacyResources, generalSchedules, workshopRuns, authorProfiles] = await Promise.all([
+  const [posts, legacyResources, generalSchedules, workshopRuns, authorProfiles, resourcePosts] = await Promise.all([
     includeNotices
       ? db.sitePost.findMany({
           where: noticeWhere,
           orderBy: { createdAt: "desc" },
-          include: publicSitePostInclude
+          select: {
+            ...publicSitePostInclude,
+            id: true, title: true, category: true, labels: true,
+            authorUserId: true, visibility: true, deletedAt: true,
+            createdAt: true, updatedAt: true, legacyCreatedAtUnknown: true,
+            body: includeNoticeBodies, relatedLinks: includeNoticeBodies, attachments: includeNoticeBodies
+          }
         })
       : Promise.resolve([]),
     db.siteResource.findMany({
@@ -99,11 +106,17 @@ export async function getPublicSiteContent(options: PublicSiteContentOptions = {
     db.authorProfile.findMany({
       orderBy: { displayName: "asc" },
       select: { displayName: true }
-    })
+    }),
+    includeNotices && !includeNoticeBodies
+      ? db.sitePost.findMany({
+          where: { AND: [noticeWhere, { category: SitePostCategory.RESOURCE }] },
+          select: { id: true, category: true, labels: true, title: true, body: true, relatedLinks: true, createdAt: true, updatedAt: true }
+        })
+      : Promise.resolve([])
   ]);
 
   const notices = posts;
-  const postResources = posts.flatMap(mapPostToResources);
+  const postResources = (includeNoticeBodies ? posts : resourcePosts).flatMap(mapPostToResources);
 
   const runsByWorkshopSlug = new Map<string, (typeof workshopRuns)[number][]>();
   for (const run of workshopRuns) {
@@ -131,7 +144,7 @@ export async function getPublicSiteContent(options: PublicSiteContentOptions = {
     generalSchedules: generalSchedules.map((schedule) => ({
       id: schedule.id,
       title: schedule.title,
-      description: schedule.description ? sanitizePublicPostBody(schedule.description) : null,
+      description: schedule.description ? sanitizePublicPostBody(schedule.description, publicImageSource({ kind: "schedule", id: schedule.id })) : null,
       date: schedule.date.toISOString(),
       endsAt: (schedule.endsAt ?? schedule.date).toISOString(),
       createdAt: schedule.createdAt.toISOString(),
@@ -187,7 +200,7 @@ function mapSitePostToPublicNotice(notice: PublicSitePostWithAuthor, includeBody
   return {
     id: notice.id,
     title: notice.title,
-    body: includeBody ? sanitizePublicPostBody(notice.body) : "",
+    body: includeBody ? sanitizePublicPostBody(notice.body, publicImageSource({ kind: "post", id: notice.id })) : "",
     legacyCreatedAtUnknown: notice.legacyCreatedAtUnknown,
     category: notice.category,
     labels: getPublicPostLabels(notice),
@@ -213,7 +226,7 @@ function mapWorkshopRunToPublic(run: WorkshopRunWithRelations) {
     runNumber: run.runNumber,
     runLabel: buildRunLabel(run.workshopSlug, run.year, run.runNumber),
     applicationFormUrl: run.applicationFormUrl,
-    description: run.description ? sanitizePublicPostBody(run.description) : null,
+    description: run.description ? sanitizePublicPostBody(run.description, publicImageSource({ kind: "workshop", id: run.id })) : null,
     noticePost: noticeAvailable
       ? {
           id: noticeAvailable.id,
@@ -430,7 +443,7 @@ function isWorkshopReviewPost(
   );
 }
 
-function mapPostToResources(post: SitePost) {
+function mapPostToResources(post: Pick<SitePost, "id" | "category" | "labels" | "title" | "body" | "relatedLinks" | "createdAt" | "updatedAt">) {
   if (post.category !== SitePostCategory.RESOURCE) {
     return [];
   }

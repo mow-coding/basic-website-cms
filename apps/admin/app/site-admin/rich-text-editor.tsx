@@ -1,6 +1,7 @@
 "use client";
 
 import { upload } from "@vercel/blob/client";
+import { getAdminFileHref } from "@/lib/site-admin/file-links";
 import { Editor as TinyMceReactEditor } from "@tinymce/tinymce-react";
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentProps } from "react";
@@ -430,13 +431,13 @@ export function RichTextEditor({
       progress(15);
       const file = new File([blob], sanitizeFileName(fileName), { type: blob.type || `image/${extension}` });
       const uploadedBlob = await upload(`site-body-images/${file.name}`, file, {
-        access: "public",
+        access: "private",
         handleUploadUrl: "/api/site-admin/blob-upload"
       });
 
       progress(100);
       setMessage("완료: 본문 이미지를 삽입했습니다.");
-      return uploadedBlob.url;
+      return getAdminFileHref(uploadedBlob.url, window.location.origin);
     } catch (error) {
       const message = error instanceof Error ? error.message : "본문 이미지 업로드에 실패했습니다.";
       setMessage(message);
