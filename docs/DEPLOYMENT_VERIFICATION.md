@@ -133,10 +133,12 @@ https://YOUR_ADMIN_DOMAIN/signin
 
 확인할 환경변수:
 
-- 관리자 프로젝트의 `BLOB_READ_WRITE_TOKEN`
-- 공개 사이트 프로젝트의 `SITE_ATTACHMENT_BLOB_HOST`
+- 관리자 프로젝트의 `PRIVATE_BLOB_READ_WRITE_TOKEN`
+- 관리자 프로젝트의 `PRIVATE_BLOB_HOST`
 
-`SITE_ATTACHMENT_BLOB_HOST`는 선택값입니다. 특정 Vercel Blob host만 허용하고 싶을 때 씁니다.
+Private Blob 저장소를 사용해야 합니다. 공개 사이트에는 저장소 토큰을 넣지 않습니다.
+글을 비공개로 전환한 뒤 이전 다운로드 링크와 본문 이미지가 차단되는지도 확인합니다.
+기존 공개 파일은 코드만 배포한다고 잠기지 않습니다. [이전 절차](SECURITY_OPERATIONS.md)를 따릅니다.
 
 ## 9. 최종 보고 형식
 

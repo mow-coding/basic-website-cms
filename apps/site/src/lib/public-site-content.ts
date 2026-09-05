@@ -10,7 +10,7 @@ import {
   type WorkshopStatus,
 } from "@/lib/site-data";
 import { env } from "@/lib/env";
-import { publicSiteContentCacheSeconds, publicSiteContentCacheTag, publicSiteFetchTimeoutMs } from "@/lib/public-cache";
+import { publicSiteFetchTimeoutMs } from "@/lib/public-cache";
 
 type PublicNoticeCategory = "GENERAL" | "COUNSELING" | "GREEN_BOARD" | "RESOURCE";
 type PublicWorkshopStatus = "OPEN" | "CLOSED" | "ENDED" | "NO_SCHEDULE";
@@ -125,7 +125,7 @@ type LoadPublicSiteContentOptions = {
   noticeLabels?: string[];
 };
 
-export type PublicSiteContentSource = "fallback" | "admin-api";
+export type PublicSiteContentSource = "fallback" | "admin-api" | "unavailable";
 type PublicSiteFetchInit = RequestInit & {
   next?: {
     revalidate?: number;
@@ -167,17 +167,17 @@ export async function loadPublicSiteContent(options: LoadPublicSiteContentOption
   try {
     const response = await fetchWithTimeout(buildPublicSiteContentUrl(apiUrl, options), {
       headers: { Accept: "application/json" },
-      next: { revalidate: publicSiteContentCacheSeconds, tags: [publicSiteContentCacheTag] },
+      cache: "no-store",
     });
 
     if (!response.ok) {
-      return getFallbackContent(options);
+      return getUnavailableContent(options);
     }
 
     const payload = (await response.json()) as PublicApiContent;
     return normalizePublicApiContent(payload);
   } catch {
-    return getFallbackContent(options);
+    return getUnavailableContent(options);
   }
 }
 
@@ -213,17 +213,17 @@ export async function loadPublicSiteNotice(id: string) {
   try {
     const response = await fetchWithTimeout(buildPublicSiteNoticeUrl(apiUrl, id), {
       headers: { Accept: "application/json" },
-      next: { revalidate: publicSiteContentCacheSeconds, tags: [publicSiteContentCacheTag] },
+      cache: "no-store",
     });
 
     if (!response.ok) {
-      return getFallbackNotice(id);
+      return null;
     }
 
     const payload = (await response.json()) as PublicApiNotice;
     return normalizePublicApiNotice(payload);
   } catch {
-    return getFallbackNotice(id);
+    return null;
   }
 }
 
@@ -243,6 +243,18 @@ function buildPublicSiteNoticeUrl(apiUrl: string, id: string) {
   url.pathname = `${url.pathname.replace(/\/$/, "")}/notices/${encodeURIComponent(id)}`;
   url.search = "";
   return url.toString();
+}
+
+function getUnavailableContent(options: LoadPublicSiteContentOptions) {
+  return {
+    ...getFallbackContent(options),
+    source: "unavailable" as const,
+    authors: [],
+    notices: [],
+    resources: [],
+    generalSchedules: [],
+    workshopRuns: []
+  };
 }
 
 function getFallbackContent(options: LoadPublicSiteContentOptions = {}) {

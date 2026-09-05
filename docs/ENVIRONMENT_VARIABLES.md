@@ -36,7 +36,10 @@ apps/admin/.env.local
 | `NEXTAUTH_SECRET` | 예 | 무작위 긴 문자열 | 무작위 긴 문자열 | 직접 생성 | 로그인 세션을 보호하는 열쇠값입니다. |
 | `GOOGLE_OAUTH_CLIENT_ID` | 부분 공개 가능 | Google Client ID | Google Client ID | Google Cloud Console | Google이 발급한 관리자 출입증의 공개 식별자입니다. 없으면 관리자 로그인 대신 설정 필요 안내가 보입니다. |
 | `GOOGLE_OAUTH_CLIENT_SECRET` | 예 | Google Client Secret | Google Client Secret | Google Cloud Console | Google OAuth의 비밀 열쇠입니다. 없으면 관리자 로그인 대신 설정 필요 안내가 보입니다. 채팅에 붙여넣지 않습니다. |
-| `BLOB_READ_WRITE_TOKEN` | 예 | Vercel Blob token | Vercel Blob token | Vercel Storage | 첨부파일 업로드를 쓸 때 필요합니다. |
+| `PRIVATE_BLOB_READ_WRITE_TOKEN` | 예 | Private Blob token | Private Blob token | Vercel Storage | 관리자 업로드와 권한 검사 후 파일 읽기에 사용합니다. |
+| `PRIVATE_BLOB_HOST` | 아니오 | private 저장소 호스트 | private 저장소 호스트 | Vercel Storage | 이 설치에 속한 저장소의 정확한 주소입니다. |
+| `BLOB_READ_WRITE_TOKEN` | 예 | 기존 public token | 기존 public token | Vercel Storage | 과거 공개 파일의 안전한 이전에만 사용합니다. 새 설치에는 필요 없습니다. |
+| `LEGACY_PUBLIC_BLOB_HOST` | 아니오 | 기존 public 호스트 | 기존 public 호스트 | Vercel Storage | 이전 중인 기존 저장소의 정확한 주소입니다. 새 설치에서는 비웁니다. |
 | `NEXT_PUBLIC_SITE_URL` | 아니오 | `http://localhost:3000` | `https://YOUR_SITE_DOMAIN` | 공개 사이트 주소 | 관리자 화면에서 공개 사이트 미리보기 링크를 만들 때 씁니다. |
 | `SITE_REVALIDATE_URL` | 아니오 | `http://localhost:3000/api/revalidate` | `https://YOUR_SITE_DOMAIN/api/revalidate` | 공개 사이트 주소 | 관리자가 저장한 뒤 공개 사이트 캐시를 새로고침할 주소입니다. |
 | `SITE_REVALIDATE_SECRET` | 예 | site 앱과 같은 값 | site 앱과 같은 값 | 직접 생성 | 관리자와 공개 사이트가 공유하는 캐시 재검증 열쇠입니다. |
@@ -65,7 +68,6 @@ apps/site/.env.local
 | `SITE_REVALIDATE_SECRET` | 예 | admin 앱과 같은 값 | admin 앱과 같은 값 | 직접 생성 | `/api/revalidate`를 보호하는 공유 열쇠입니다. |
 | `GOOGLE_SITE_VERIFICATION` | 아니오 | 비워둘 수 있음 | Google Search Console 값 | Google Search Console | Google 사이트 소유권 확인용 메타값입니다. |
 | `NAVER_SITE_VERIFICATION` | 아니오 | 비워둘 수 있음 | Naver Search Advisor 값 | Naver Search Advisor | 네이버 사이트 소유권 확인용 메타값입니다. |
-| `SITE_ATTACHMENT_BLOB_HOST` | 아니오 | 비워둘 수 있음 | Vercel Blob public host | Vercel Blob | 첨부파일 다운로드 프록시가 특정 Blob host만 허용하게 할 때 씁니다. |
 
 ## Neon 연결 문자열 선택
 
@@ -110,7 +112,8 @@ Vercel apps/site project
 DATABASE_URL
 NEXTAUTH_URL
 NEXTAUTH_SECRET
-BLOB_READ_WRITE_TOKEN
+PRIVATE_BLOB_READ_WRITE_TOKEN
+PRIVATE_BLOB_HOST
 NEXT_PUBLIC_SITE_URL
 SITE_REVALIDATE_URL
 SITE_REVALIDATE_SECRET
@@ -131,7 +134,6 @@ SITE_ADMIN_API_URL
 SITE_REVALIDATE_SECRET
 GOOGLE_SITE_VERIFICATION
 NAVER_SITE_VERIFICATION
-SITE_ATTACHMENT_BLOB_HOST
 ```
 
 선택값은 비워둘 수 있지만, 첨부파일 업로드나 검색엔진 인증처럼 해당 기능을 쓰려면 채워야 합니다.

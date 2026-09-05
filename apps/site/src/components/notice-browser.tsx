@@ -435,7 +435,7 @@ export function NoticeDetailModal({
                       )
                     )}
                     {attachments.slice(0, 5).map((item) => {
-                      const href = getAttachmentHref(item);
+                      const href = getAttachmentHref(item, noticeId);
                       const isDownload = href.startsWith("/api/attachments/download");
 
                       return (
