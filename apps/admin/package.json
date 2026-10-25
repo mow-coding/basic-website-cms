@@ -11,28 +11,36 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push",
-    "seed": "node scripts/seed-site-admin.mjs",
-    "seed:sample": "node scripts/seed-sample-content.mjs"
+    "db:migrate": "node scripts/with-env.mjs prisma migrate dev",
+    "db:deploy": "node scripts/with-env.mjs prisma migrate deploy",
+    "db:baseline": "node scripts/with-env.mjs node scripts/baseline-existing-db.mjs",
+    "db:validate": "node scripts/with-env.mjs prisma validate",
+    "db:push": "node scripts/with-env.mjs prisma db push",
+    "seed": "node scripts/with-env.mjs node scripts/seed-site-admin.mjs",
+    "seed:sample": "node scripts/with-env.mjs node scripts/seed-sample-content.mjs",
+    "files:inventory": "node scripts/with-env.mjs node scripts/inventory-unreferenced-files.mjs"
   },
   "dependencies": {
     "@hyunbinseo/holidays-kr": "^4.2026.0",
+    "@next/env": "16.4.2",
     "@prisma/client": "^6.5.0",
     "@tinymce/tinymce-react": "^6.3.0",
     "@vercel/blob": "^2.8.0",
-    "next": "^16.3.4",
+    "next": "16.4.2",
     "next-auth": "^4.24.15",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "sanitize-html": "^2.17.7",
+    "sanitize-html": "2.18.1",
+    "sharp": "0.35.5",
     "tinymce": "^7.9.3",
     "tinymce-i18n": "^26.5.18",
-    "zod": "^3.24.2"
+    "zod": "4.6.7"
   },
   "overrides": {
     "postcss": "8.5.28",
-    "undici": "6.28.1",
+    "undici": "6.29.1",
+    "vite": "8.2.4",
+    "zod": "4.6.7",
     "uuid": "11.1.1",
     "@prisma/config": { "deepmerge-ts": "8.0.2" }
   },
@@ -42,10 +50,10 @@
     "@types/react-dom": "^19.2.3",
     "@types/sanitize-html": "^2.16.1",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.3.4",
+    "eslint-config-next": "16.4.2",
     "prisma": "^6.5.0",
     "typescript": "^5.8.2",
-    "vitest": "^4.1.6"
+    "vitest": "4.1.12"
   },
   "engines": {
     "node": ">=20.9.0"

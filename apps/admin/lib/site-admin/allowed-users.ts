@@ -4,6 +4,8 @@ export type SiteAdminAccount = {
   email: string;
   defaultDisplayName: string;
   kind: SiteAdminKind;
+  // Pin this for Google accounts outside Gmail/Workspace.
+  googleSubject?: string;
 };
 
 const accounts: SiteAdminAccount[] = [

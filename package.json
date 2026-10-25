@@ -1,6 +1,6 @@
 {
   "name": "basic-website-cms",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "작은 조직을 위한 공개 웹사이트 + 관리자 콘솔 템플릿",
   "license": "MIT",
@@ -15,6 +15,10 @@
     "admin:build": "npm --prefix apps/admin run build",
     "admin:db:generate": "npm --prefix apps/admin run db:generate",
     "admin:db:push": "npm --prefix apps/admin run db:push",
+    "admin:db:deploy": "npm --prefix apps/admin run db:deploy",
+    "admin:db:baseline": "npm --prefix apps/admin run db:baseline --",
+    "admin:db:validate": "npm --prefix apps/admin run db:validate",
+    "admin:files:inventory": "npm --prefix apps/admin run files:inventory --",
     "admin:seed": "npm --prefix apps/admin run seed",
     "admin:seed:sample": "npm --prefix apps/admin run seed:sample"
   }

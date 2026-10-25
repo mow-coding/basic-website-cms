@@ -78,7 +78,9 @@ Neon은 보통 두 종류의 연결 문자열을 제공합니다.
 | Direct connection | Prisma `db push`, migration, schema 작업처럼 데이터베이스 구조를 바꾸는 명령 |
 | Pooled connection | Vercel 같은 serverless 환경에서 앱이 많은 짧은 연결을 만들 때 |
 
-이 repo는 현재 `DATABASE_URL` 하나를 씁니다. 처음 schema를 만들 때는 direct connection을 `apps/admin/.env.local`에 넣고 `npm run admin:db:push`를 실행하는 편이 안전합니다. 배포된 관리자 앱에서는 Neon의 pooled connection을 쓰는 구성이 유리할 수 있습니다.
+이 repo는 현재 `DATABASE_URL` 하나를 씁니다. 처음 schema를 만들 때는 direct connection을 `apps/admin/.env.local`에 넣고 `npm run admin:db:deploy`를 실행합니다. 기존 DB는 [업그레이드 안내](UPGRADING.md)의 백업·기준점 등록 순서를 먼저 따릅니다. DB/seed 스크립트가 `.env.local`을 자동으로 읽으며 셸에 지정한 값이 우선합니다. 배포된 관리자 앱에서는 Neon의 pooled connection을 쓰는 구성이 유리할 수 있습니다.
+
+관리자 주소를 이전한 경우 선택적으로 `LEGACY_ADMIN_ORIGINS`를 사용합니다. 확인된 과거 HTTPS origin만 쉼표로 구분해 입력합니다. 경로·마지막 `/`·와일드카드는 넣지 않습니다. 현재 `NEXTAUTH_URL`은 별도로 기본 허용됩니다. 이 값에는 비밀값이 아닌 주소만 들어가며, 과거 주소가 없다면 비워 둡니다.
 
 공식 참고:
 

@@ -1,20 +1,11 @@
 import { env } from "@/lib/env";
 import { sanitizePostBody } from "@/lib/site-admin/sanitize";
-import { parseManagedFile } from "@/lib/site-admin/managed-files";
+import { resolveManagedImageReference } from "@/lib/site-admin/image-references";
 
 export type PublicMediaOwner = { kind: "post" | "schedule" | "workshop"; id: string };
 
 function imageBlobSource(src: string) {
-  try {
-    const url = new URL(src);
-    if (url.origin === new URL(env.NEXTAUTH_URL || "").origin && url.pathname === "/api/site-admin/files") {
-      const value = url.searchParams.get("url");
-      return value && parseManagedFile(value, "image") ? value : null;
-    }
-    return parseManagedFile(src, "image") ? src : null;
-  } catch {
-    return null;
-  }
+  return resolveManagedImageReference(src);
 }
 
 export function publicImageSource(owner: PublicMediaOwner) {

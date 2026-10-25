@@ -1,5 +1,16 @@
 # Google OAuth 설정
 
+## 1.1.0 로그인 확인 정책
+
+Google이 확인한 이메일(`email_verified=true`)과 계정의 고유 식별자(`sub`)를 함께 사용합니다. 기존 이메일 허용 목록과 manager/editor 역할은 그대로 권한 기준입니다.
+
+- Gmail 또는 해당 도메인을 관리하는 Google Workspace 계정은 첫 검증 로그인에서 기존 로컬 사용자와 연결합니다. 기존 사용자 ID·작성자·별명을 새 계정으로 교체하지 않습니다.
+- Gmail/Workspace 이외 이메일로 만든 Google 계정은 이메일 검증만으로 자동 연결하지 않습니다. 허용 목록의 해당 항목에 `googleSubject`를 사전 지정하고 그 식별자와 일치하는 계정만 허용합니다. 본인이 확인한 식별자를 비공개 운영 설정에 넣으며 실제 식별자를 공개 starter나 이슈에 올리지 않습니다.
+- 이미 연결된 식별자를 다른 Google 계정이 덮어쓸 수 없습니다. 이메일 변경·계정 교체는 자동 처리하지 않으므로 담당 운영자가 기존 연결과 허용 목록을 함께 검토해야 합니다.
+- 업데이트 후 이전 로그인 세션은 다시 로그인해야 합니다. [기존 설치 업그레이드](UPGRADING.md)의 DB 변경을 먼저 적용하세요.
+
+근거: [Google의 이메일 소유권·고유 식별자 안내](https://developers.google.com/identity/gsi/web/guides/verify-google-id-token), [NextAuth Google provider](https://next-auth.js.org/providers/google).
+
 Google OAuth는 관리자 콘솔의 출입증입니다. 관리자 콘솔은 Google에게 "이 사람이 로그인해도 되는 사람인가요?"라고 묻고, Google이 확인해 주면 관리자 화면으로 들여보냅니다.
 
 이 단계는 사용자가 Google Cloud Console 화면에서 직접 해야 하는 일이 많습니다. AI는 옆에서 안내하고, 값의 의미와 위치를 설명합니다.

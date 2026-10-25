@@ -1,3 +1,4 @@
+import { adminRichText } from "@/lib/site-admin/image-references";
 import { redirect } from "next/navigation";
 import { SiteContentVisibility, SitePostCategory } from "@prisma/client";
 import { AdminSectionNav } from "@/app/site-admin/admin-section-nav";
@@ -405,7 +406,7 @@ function toScheduleManagementGeneralItem(
 ) {
   return {
     dateIso: schedule.date.toISOString(),
-    description: schedule.description,
+    description: schedule.description ? adminRichText(schedule.description) : null,
     endsAtIso: (schedule.endsAt ?? schedule.date).toISOString(),
     id: schedule.id,
     title: schedule.title,
@@ -420,7 +421,8 @@ function toScheduleManagementWorkshopRunItem(
 
   return {
     applicationFormUrl: run.applicationFormUrl,
-    description: run.description,
+    description: run.description ? adminRichText(run.description) : null,
+    revision: run.revision,
     id: run.id,
     noticePostId: linkedNoticePost?.id ?? null,
     noticePostTitle: linkedNoticePost?.title ?? null,

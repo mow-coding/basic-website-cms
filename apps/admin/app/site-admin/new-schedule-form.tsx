@@ -70,7 +70,7 @@ type Props = {
   returnTo?: string;
   submitLabel?: string;
   updateGeneralAction?: (formData: FormData) => Promise<void>;
-  updateWorkshopRunAction?: (formData: FormData) => Promise<void>;
+  updateWorkshopRunAction?: (formData: FormData) => Promise<void | { status: "conflict"; message: string }>;
 };
 
 type ScheduleKind = "general" | "workshop";
@@ -94,6 +94,7 @@ export type ScheduleFormInitialValue =
       description: string | null;
       id: string;
       kind: "workshop";
+      revision: number;
       noticePostId: string | null;
       stages: Array<{
         applicationEndsAtIso: string | null;
@@ -637,7 +638,12 @@ export function NewScheduleForm({
           return;
         }
         formData.set("id", initialValue.id);
-        await updateWorkshopRunAction(formData);
+        formData.set("expectedRevision", String(initialValue.revision));
+        const result = await updateWorkshopRunAction(formData);
+        if (result?.status === "conflict") {
+          setIsSubmitting(false);
+          alert(result.message);
+        }
         return;
       }
       await createWorkshopRunAction(formData);

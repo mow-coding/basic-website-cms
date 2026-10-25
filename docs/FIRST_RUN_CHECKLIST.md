@@ -124,16 +124,18 @@ Prisma schema 작업에는 Neon의 direct connection string을 쓰는 편이 안
 환경변수를 채운 뒤 실행합니다.
 
 ```powershell
-npm run admin:db:push
+npm run admin:db:deploy
 npm run admin:seed
 npm run admin:seed:sample
 ```
 
 역할:
 
-- `admin:db:push`: Neon 데이터 금고에 필요한 칸 구조를 만듭니다.
+- `admin:db:deploy`: 버전이 기록된 마이그레이션으로 Neon 데이터 금고의 칸 구조를 만듭니다.
 - `admin:seed`: 기본 관리자 계정 정보를 넣습니다.
 - `admin:seed:sample`: 처음 화면을 확인할 샘플 게시글과 일정을 넣습니다.
+
+이 명령은 새로 만든 빈 DB를 기준으로 합니다. 기존 운영 사이트는 seed를 다시 실행하지 말고 [업그레이드 안내](UPGRADING.md)를 따르세요. DB 명령은 관리자 `.env.local`을 읽으며 셸에 같은 이름으로 지정한 값이 우선합니다.
 
 ## 7. 로컬에서 두 앱 실행
 

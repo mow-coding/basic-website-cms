@@ -15,7 +15,9 @@ import {
 } from "@/lib/site-admin/constants";
 import { normalizeHttpUrl, parseLinkLines } from "@/lib/site-admin/links";
 import { revalidatePublicSiteContent } from "@/lib/site-admin/public-site-revalidation";
-import { sanitizePostBody } from "@/lib/site-admin/sanitize";
+import { canonicalRichText as sanitizePostBody } from "@/lib/site-admin/image-references";
+import { withSiteAdminMutation, recordSiteAdminFailure } from "@/lib/site-admin/audit";
+import { saveWorkshopRun, ScheduleConflictError } from "@/lib/site-admin/save-workshop-run";
 import {
   normalizeScheduleApplicationFormUrlInput,
   normalizeScheduleNoticePostIdInput
@@ -63,7 +65,7 @@ export async function createSitePostAction(formData: FormData) {
     const relatedLinks = readRelatedLinks(formData);
     const attachments = readAttachments(formData);
 
-    const post = await db.sitePost.create({
+    const post = await withSiteAdminMutation(access, { action: "createSitePostAction", resourceType: "sitePost", fields: ["authorUserId","title","body","category","visibility","labels","relatedLinks","attachments"] }, (tx) => tx.sitePost.create({
       data: {
         authorUserId: access.appUserId,
         title,
@@ -77,7 +79,7 @@ export async function createSitePostAction(formData: FormData) {
       select: {
         id: true
       }
-    });
+    }));
 
     postId = post.id;
   } catch (error) {
@@ -105,7 +107,8 @@ export async function updateSitePostAction(formData: FormData) {
     });
 
     if (!post || (!access.canManageSystemSettings && post.authorUserId !== access.appUserId)) {
-      redirectWithError("post-permission");
+      await recordSiteAdminFailure(access, { action: "updateSitePostAction", resourceType: "admin" }, "DENIED");
+    redirectWithError("post-permission");
     }
 
     const postFields = readRichTextPostFields(formData);
@@ -114,7 +117,7 @@ export async function updateSitePostAction(formData: FormData) {
     const relatedLinks = readRelatedLinks(formData);
     const attachments = readAttachments(formData);
 
-    await db.sitePost.update({
+    await withSiteAdminMutation(access, { action: "updateSitePostAction", resourceType: "sitePost", fields: ["category","visibility","labels","relatedLinks","attachments"] }, (tx) => tx.sitePost.update({
       where: { id },
       data: {
         ...postFields,
@@ -124,7 +127,7 @@ export async function updateSitePostAction(formData: FormData) {
         relatedLinks,
         attachments
       }
-    });
+    }));
 
     console.info("[site-admin] post update saved", {
       action: "site-post-update",
@@ -159,13 +162,14 @@ export async function softDeleteSitePostAction(formData: FormData) {
   });
 
   if (!post || (!access.canManageSystemSettings && post.authorUserId !== access.appUserId)) {
+    await recordSiteAdminFailure(access, { action: "softDeleteSitePostAction", resourceType: "admin" }, "DENIED");
     redirectWithError("post-permission");
   }
 
-  await db.sitePost.update({
+  await withSiteAdminMutation(access, { action: "softDeleteSitePostAction", resourceType: "sitePost", fields: ["deletedAt"] }, (tx) => tx.sitePost.update({
     where: { id },
     data: { deletedAt: new Date() }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("deleted");
@@ -182,13 +186,14 @@ export async function restoreSitePostAction(formData: FormData) {
   });
 
   if (!post || (!access.canManageSystemSettings && post.authorUserId !== access.appUserId)) {
+    await recordSiteAdminFailure(access, { action: "restoreSitePostAction", resourceType: "admin" }, "DENIED");
     redirectWithError("post-permission");
   }
 
-  await db.sitePost.update({
+  await withSiteAdminMutation(access, { action: "restoreSitePostAction", resourceType: "sitePost", fields: ["deletedAt"] }, (tx) => tx.sitePost.update({
     where: { id },
     data: { deletedAt: null }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("restored");
@@ -197,16 +202,17 @@ export async function restoreSitePostAction(formData: FormData) {
 export async function permanentlyDeleteSitePostAction(formData: FormData) {
   const access = await requireSiteAdminAccess();
   if (!access.canManageSystemSettings) {
+    await recordSiteAdminFailure(access, { action: "permanentlyDeleteSitePostAction", resourceType: "admin" }, "DENIED");
     redirectWithError("hard-delete-permission");
   }
 
   const id = readRequiredString(formData, "id");
-  await db.sitePost.deleteMany({
+  await withSiteAdminMutation(access, { action: "permanentlyDeleteSitePostAction", resourceType: "sitePost", fields: [] }, (tx) => tx.sitePost.deleteMany({
     where: {
       id,
       deletedAt: { not: null }
     }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("hard-deleted");
@@ -219,28 +225,28 @@ export async function bulkSitePostAction(formData: FormData) {
   const ownershipFilter = access.canManageSystemSettings ? {} : { authorUserId: access.appUserId };
 
   if (action === "trash") {
-    await db.sitePost.updateMany({
+    await withSiteAdminMutation(access, { action: "bulkSitePostAction", resourceType: "sitePost", fields: ["deletedAt"] }, (tx) => tx.sitePost.updateMany({
       where: {
         id: { in: ids },
         deletedAt: null,
         ...ownershipFilter
       },
       data: { deletedAt: new Date() }
-    });
+    }));
 
     await revalidateSiteAdminContent();
     redirectWithMessage("deleted");
   }
 
   if (action === "restore") {
-    await db.sitePost.updateMany({
+    await withSiteAdminMutation(access, { action: "bulkSitePostAction", resourceType: "sitePost", fields: ["deletedAt"] }, (tx) => tx.sitePost.updateMany({
       where: {
         id: { in: ids },
         deletedAt: { not: null },
         ...ownershipFilter
       },
       data: { deletedAt: null }
-    });
+    }));
 
     await revalidateSiteAdminContent();
     redirectWithMessage("restored");
@@ -248,15 +254,16 @@ export async function bulkSitePostAction(formData: FormData) {
 
   if (action === "permanent-delete") {
     if (!access.canManageSystemSettings) {
-      redirectWithError("hard-delete-permission");
+      await recordSiteAdminFailure(access, { action: "bulkSitePostAction", resourceType: "admin" }, "DENIED");
+    redirectWithError("hard-delete-permission");
     }
 
-    await db.sitePost.deleteMany({
+    await withSiteAdminMutation(access, { action: "bulkSitePostAction", resourceType: "sitePost", fields: [] }, (tx) => tx.sitePost.deleteMany({
       where: {
         id: { in: ids },
         deletedAt: { not: null }
       }
-    });
+    }));
 
     await revalidateSiteAdminContent();
     redirectWithMessage("hard-deleted");
@@ -269,7 +276,7 @@ export async function createSiteResourceAction(formData: FormData) {
   const access = await requireSiteAdminAccess();
   const workshopSlug = readWorkshopSlug(formData);
 
-  await db.siteResource.create({
+  await withSiteAdminMutation(access, { action: "createSiteResourceAction", resourceType: "siteResource", fields: ["authorUserId","workshopSlug","session","title","description","url","visibility"] }, (tx) => tx.siteResource.create({
     data: {
       authorUserId: access.appUserId,
       workshopSlug,
@@ -279,7 +286,7 @@ export async function createSiteResourceAction(formData: FormData) {
       url: readRequiredHttpUrl(formData, "url"),
       visibility: readEnum(formData, "visibility", validVisibilities, SiteContentVisibility.PUBLIC)
     }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("resource-created");
@@ -296,10 +303,11 @@ export async function updateSiteResourceAction(formData: FormData) {
   });
 
   if (!resource || (!access.canManageSystemSettings && resource.authorUserId !== access.appUserId)) {
+    await recordSiteAdminFailure(access, { action: "updateSiteResourceAction", resourceType: "admin" }, "DENIED");
     redirectWithError("resource-permission");
   }
 
-  await db.siteResource.update({
+  await withSiteAdminMutation(access, { action: "updateSiteResourceAction", resourceType: "siteResource", fields: ["workshopSlug","session","title","description","url","visibility"] }, (tx) => tx.siteResource.update({
     where: { id },
     data: {
       workshopSlug: readWorkshopSlug(formData),
@@ -309,7 +317,7 @@ export async function updateSiteResourceAction(formData: FormData) {
       url: readRequiredHttpUrl(formData, "url"),
       visibility: readEnum(formData, "visibility", validVisibilities, SiteContentVisibility.PUBLIC)
     }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("resource-updated");
@@ -326,13 +334,14 @@ export async function softDeleteSiteResourceAction(formData: FormData) {
   });
 
   if (!resource || (!access.canManageSystemSettings && resource.authorUserId !== access.appUserId)) {
+    await recordSiteAdminFailure(access, { action: "softDeleteSiteResourceAction", resourceType: "admin" }, "DENIED");
     redirectWithError("resource-permission");
   }
 
-  await db.siteResource.update({
+  await withSiteAdminMutation(access, { action: "softDeleteSiteResourceAction", resourceType: "siteResource", fields: ["deletedAt"] }, (tx) => tx.siteResource.update({
     where: { id },
     data: { deletedAt: new Date() }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("resource-deleted");
@@ -349,13 +358,14 @@ export async function restoreSiteResourceAction(formData: FormData) {
   });
 
   if (!resource || (!access.canManageSystemSettings && resource.authorUserId !== access.appUserId)) {
+    await recordSiteAdminFailure(access, { action: "restoreSiteResourceAction", resourceType: "admin" }, "DENIED");
     redirectWithError("resource-permission");
   }
 
-  await db.siteResource.update({
+  await withSiteAdminMutation(access, { action: "restoreSiteResourceAction", resourceType: "siteResource", fields: ["deletedAt"] }, (tx) => tx.siteResource.update({
     where: { id },
     data: { deletedAt: null }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("resource-restored");
@@ -364,16 +374,17 @@ export async function restoreSiteResourceAction(formData: FormData) {
 export async function permanentlyDeleteSiteResourceAction(formData: FormData) {
   const access = await requireSiteAdminAccess();
   if (!access.canManageSystemSettings) {
+    await recordSiteAdminFailure(access, { action: "permanentlyDeleteSiteResourceAction", resourceType: "admin" }, "DENIED");
     redirectWithError("hard-delete-permission");
   }
 
   const id = readRequiredString(formData, "id");
-  await db.siteResource.deleteMany({
+  await withSiteAdminMutation(access, { action: "permanentlyDeleteSiteResourceAction", resourceType: "siteResource", fields: [] }, (tx) => tx.siteResource.deleteMany({
     where: {
       id,
       deletedAt: { not: null }
     }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("resource-hard-deleted");
@@ -388,7 +399,7 @@ export async function createGeneralScheduleAction(formData: FormData) {
   const visibility = readRequiredEnum(formData, "scheduleVisibility", validVisibilities, "schedule-payload-invalid");
   ensureDateRangeOrder(date, endsAt);
 
-  await db.generalSchedule.create({
+  await withSiteAdminMutation(access, { action: "createGeneralScheduleAction", resourceType: "generalSchedule", fields: ["authorUserId","title","description","date","endsAt","visibility"] }, (tx) => tx.generalSchedule.create({
     data: {
       authorUserId: access.appUserId,
       title,
@@ -397,7 +408,7 @@ export async function createGeneralScheduleAction(formData: FormData) {
       endsAt,
       visibility
     }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-created");
@@ -407,7 +418,7 @@ export async function createGeneralScheduleAction(formData: FormData) {
 // 관리하는 "기관 공용 캘린더"다. 그래서 게시물/자료와 달리 수정·삭제에 작성자 소유권 검사를
 // 두지 않는다(authorUserId는 기록용). 하드삭제 등 위험 동작은 여전히 manager 전용이다.
 export async function updateGeneralScheduleAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
   const date = readRequiredDate(formData, "scheduleStartsAt", "scheduleDate");
@@ -417,10 +428,11 @@ export async function updateGeneralScheduleAction(formData: FormData) {
     where: { id, deletedAt: null }
   });
   if (!existing) {
+    await recordSiteAdminFailure(access, { action: "updateGeneralScheduleAction", resourceType: "admin" }, "DENIED");
     redirectWithError("schedule-permission", returnTo);
   }
 
-  await db.generalSchedule.update({
+  await withSiteAdminMutation(access, { action: "updateGeneralScheduleAction", resourceType: "generalSchedule", fields: ["title","description","date","endsAt","visibility"] }, (tx) => tx.generalSchedule.update({
     where: { id },
     data: {
       title: readRequiredString(formData, "scheduleTitle"),
@@ -429,50 +441,50 @@ export async function updateGeneralScheduleAction(formData: FormData) {
       endsAt,
       visibility: readRequiredEnum(formData, "scheduleVisibility", validVisibilities, "schedule-payload-invalid")
     }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-updated", returnTo);
 }
 
 export async function toggleGeneralScheduleVisibilityAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
   const visibility = readRequiredEnum(formData, "visibility", validVisibilities, "schedule-payload-invalid");
 
-  await db.generalSchedule.updateMany({
+  await withSiteAdminMutation(access, { action: "toggleGeneralScheduleVisibilityAction", resourceType: "generalSchedule", fields: ["visibility"] }, (tx) => tx.generalSchedule.updateMany({
     where: { id, deletedAt: null },
     data: { visibility }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-updated", returnTo);
 }
 
 export async function softDeleteGeneralScheduleAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
 
-  await db.generalSchedule.updateMany({
+  await withSiteAdminMutation(access, { action: "softDeleteGeneralScheduleAction", resourceType: "generalSchedule", fields: ["deletedAt"] }, (tx) => tx.generalSchedule.updateMany({
     where: { id, deletedAt: null },
     data: { deletedAt: new Date() }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-deleted", returnTo);
 }
 
 export async function restoreGeneralScheduleAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
 
-  await db.generalSchedule.updateMany({
+  await withSiteAdminMutation(access, { action: "restoreGeneralScheduleAction", resourceType: "generalSchedule", fields: ["deletedAt"] }, (tx) => tx.generalSchedule.updateMany({
     where: { id, deletedAt: { not: null } },
     data: { deletedAt: null }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-restored", returnTo);
@@ -482,13 +494,14 @@ export async function permanentlyDeleteGeneralScheduleAction(formData: FormData)
   const access = await requireSiteAdminAccess();
   const returnTo = readSafeSiteAdminReturnPath(formData);
   if (!access.canManageSystemSettings) {
+    await recordSiteAdminFailure(access, { action: "permanentlyDeleteGeneralScheduleAction", resourceType: "admin" }, "DENIED");
     redirectWithError("hard-delete-permission", returnTo);
   }
 
   const id = readRequiredString(formData, "id");
-  await db.generalSchedule.deleteMany({
+  await withSiteAdminMutation(access, { action: "permanentlyDeleteGeneralScheduleAction", resourceType: "generalSchedule", fields: [] }, (tx) => tx.generalSchedule.deleteMany({
     where: { id, deletedAt: { not: null } }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-hard-deleted", returnTo);
@@ -501,10 +514,10 @@ export async function createWorkshopRunAction(formData: FormData) {
 
   const year = pickRunYear(payload);
 
-  await db.$transaction(async (tx) => {
+  await withSiteAdminMutation(access, { action: "createWorkshopRunAction", resourceType: "workshopRun", resourceId: formData.get("id")?.toString().slice(0, 200) }, async (tx) => {
     const runNumber = await pickNextRunNumber(tx, payload.workshopSlug, year);
 
-    await tx.workshopRun.create({
+    const createdRun = await tx.workshopRun.create({
       data: {
         authorUserId: access.appUserId,
         workshopSlug: payload.workshopSlug,
@@ -534,6 +547,7 @@ export async function createWorkshopRunAction(formData: FormData) {
     });
 
     await renumberWorkshopRunsForYear(tx, payload.workshopSlug, year);
+    return { id: createdRun.id };
   });
 
   await revalidateSiteAdminContent();
@@ -541,7 +555,7 @@ export async function createWorkshopRunAction(formData: FormData) {
 }
 
 export async function updateWorkshopRunAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
   const existing = await db.workshopRun.findFirst({
@@ -565,6 +579,7 @@ export async function updateWorkshopRunAction(formData: FormData) {
     }
   });
   if (!existing) {
+    await recordSiteAdminFailure(access, { action: "updateWorkshopRunAction", resourceType: "admin" }, "DENIED");
     redirectWithError("schedule-permission", returnTo);
   }
 
@@ -576,98 +591,42 @@ export async function updateWorkshopRunAction(formData: FormData) {
   }
   await ensureScheduleNoticePostIsPublic(payload.noticePostId);
 
-  const stageLinkOverrides = new Map(
-    existing.stages.map((stage) => [
-      stage.id,
-      {
-        applicationFormUrl: stage.applicationFormUrl,
-        noticePostId: stage.noticePostId
-      }
-    ])
-  );
-  const sessionLinkOverrides = new Map(
-    existing.stages.flatMap((stage) =>
-      stage.sessions.map((session) => [
-        session.id,
-        {
-          applicationFormUrl: session.applicationFormUrl,
-          noticePostId: session.noticePostId
-        }
-      ] as const)
-    )
-  );
-
-  await db.$transaction(async (tx) => {
-    await tx.scheduleSession.deleteMany({
-      where: { stage: { workshopRunId: id } }
+  const revisionText = formData.get("expectedRevision")?.toString();
+  const expectedRevision = revisionText && /^\d+$/.test(revisionText) ? Number(revisionText) : -1;
+  try {
+    await withSiteAdminMutation(access, { action: "updateWorkshopRunAction", resourceType: "workshopRun", resourceId: formData.get("id")?.toString().slice(0, 200) }, async (tx) => {
+      const saved = await saveWorkshopRun(tx, id, expectedRevision, payload);
+      await renumberWorkshopRunsForYear(tx, existing.workshopSlug, existing.year);
+      return saved;
     });
-    await tx.scheduleStage.deleteMany({
-      where: { workshopRunId: id }
-    });
-
-    await tx.workshopRun.update({
-      where: { id },
-      data: {
-        workshopSlug: payload.workshopSlug,
-        applicationFormUrl: payload.applicationFormUrl,
-        noticePostId: payload.noticePostId,
-        description: payload.description,
-        visibility: payload.visibility,
-        stages: {
-          create: payload.stages.map((stage, stageIndex) => {
-            const stageOverride = stage.id ? stageLinkOverrides.get(stage.id) : undefined;
-
-            return {
-              stageName: stage.stageName,
-              orderIndex: stageIndex,
-              applicationStartsAt: stage.applicationStartsAt,
-              applicationEndsAt: stage.applicationEndsAt,
-              applicationFormUrl: stageOverride?.applicationFormUrl ?? null,
-              noticePostId: stageOverride?.noticePostId ?? null,
-              sessions: {
-                create: stage.sessions.map((session, sessionIndex) => {
-                  const sessionOverride = session.id ? sessionLinkOverrides.get(session.id) : undefined;
-
-                  return {
-                    dayIndex: sessionIndex,
-                    sessionDate: session.sessionDate,
-                    startTime: session.startTime,
-                    endTime: session.endTime,
-                    applicationFormUrl: sessionOverride?.applicationFormUrl ?? null,
-                    noticePostId: sessionOverride?.noticePostId ?? null
-                  };
-                })
-              }
-            };
-          })
-        }
-      }
-    });
-
-    await renumberWorkshopRunsForYear(tx, existing.workshopSlug, existing.year);
-  });
+  } catch (error) {
+    if (error instanceof ScheduleConflictError) {
+      return { status: "conflict" as const, message: "다른 화면에서 먼저 저장했습니다. 최신 내용을 확인한 뒤 다시 저장해 주세요. 입력한 내용은 유지됩니다." };
+    }
+    throw error;
+  }
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-updated", returnTo);
 }
 
 export async function toggleWorkshopRunVisibilityAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
   const visibility = readRequiredEnum(formData, "visibility", validVisibilities, "schedule-payload-invalid");
 
-  await db.workshopRun.updateMany({
+  await withSiteAdminMutation(access, { action: "toggleWorkshopRunVisibilityAction", resourceType: "workshopRun", fields: ["revision","visibility"] }, (tx) => tx.workshopRun.updateMany({
     where: { id, deletedAt: null },
-    data: { visibility }
-  });
+    data: { revision: { increment: 1 }, visibility }
+  }));
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-updated", returnTo);
 }
 
 export async function updateWorkshopScheduleEventLinksAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const returnTo = readSafeSiteAdminReturnPath(formData);
   const scheduleEventKind = readRequiredString(formData, "scheduleEventKind");
   const scheduleEventId = readRequiredString(formData, "scheduleEventId");
@@ -680,48 +639,35 @@ export async function updateWorkshopScheduleEventLinksAction(formData: FormData)
     applicationFormUrl,
     noticePostId
   };
-  const result =
-    scheduleEventKind === "stage"
-      ? await db.scheduleStage.updateMany({
-          where: {
-            id: scheduleEventId,
-            workshopRun: { deletedAt: null }
-          },
-          data
-        })
-      : scheduleEventKind === "session"
-        ? await db.scheduleSession.updateMany({
-            where: {
-              id: scheduleEventId,
-              stage: { workshopRun: { deletedAt: null } }
-            },
-            data
-          })
-        : null;
-
-  if (!result) {
-    redirectWithError("schedule-payload-invalid", returnTo);
-  }
-
-  if (result.count === 0) {
-    redirectWithError("schedule-permission", returnTo);
-  }
+  await withSiteAdminMutation(access, { action: "updateWorkshopScheduleEventLinksAction", resourceType: "workshopRun", resourceId: formData.get("id")?.toString().slice(0, 200) }, async (tx) => {
+    const stage = scheduleEventKind === "stage" ? await tx.scheduleStage.findUnique({ where: { id: scheduleEventId } }) : null;
+    const session = scheduleEventKind === "session" ? await tx.scheduleSession.findUnique({ where: { id: scheduleEventId }, include: { stage: true } }) : null;
+    const runId = stage?.workshopRunId ?? session?.stage.workshopRunId;
+    if (!runId) throw new Error("Invalid schedule link target");
+    const claimed = await tx.workshopRun.updateMany({ where: { id: runId, deletedAt: null }, data: { revision: { increment: 1 } } });
+    if (claimed.count !== 1) throw new Error("Schedule is not available");
+    const result = stage
+      ? await tx.scheduleStage.updateMany({ where: { id: scheduleEventId, workshopRunId: runId }, data })
+      : await tx.scheduleSession.updateMany({ where: { id: scheduleEventId, scheduleStageId: session!.scheduleStageId }, data });
+    if (result.count !== 1) throw new Error("Schedule link target changed");
+    return { ...result, id: runId };
+  });
 
   await revalidateSiteAdminContent();
   redirectWithMessage("schedule-updated", returnTo);
 }
 
 export async function softDeleteWorkshopRunAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
 
-  await db.$transaction(async (tx) => {
+  await withSiteAdminMutation(access, { action: "softDeleteWorkshopRunAction", resourceType: "workshopRun", resourceId: formData.get("id")?.toString().slice(0, 200) }, async (tx) => {
     const groups = await getWorkshopRunNumberingGroups(tx, [id]);
 
     await tx.workshopRun.updateMany({
       where: { id, deletedAt: null },
-      data: { deletedAt: new Date() }
+      data: { revision: { increment: 1 }, deletedAt: new Date() }
     });
 
     await renumberWorkshopRunGroups(tx, groups);
@@ -732,16 +678,16 @@ export async function softDeleteWorkshopRunAction(formData: FormData) {
 }
 
 export async function restoreWorkshopRunAction(formData: FormData) {
-  await requireSiteAdminAccess();
+  const access = await requireSiteAdminAccess();
   const id = readRequiredString(formData, "id");
   const returnTo = readSafeSiteAdminReturnPath(formData);
 
-  await db.$transaction(async (tx) => {
+  await withSiteAdminMutation(access, { action: "restoreWorkshopRunAction", resourceType: "workshopRun", resourceId: formData.get("id")?.toString().slice(0, 200) }, async (tx) => {
     const groups = await getWorkshopRunNumberingGroups(tx, [id]);
 
     await tx.workshopRun.updateMany({
       where: { id, deletedAt: { not: null } },
-      data: { deletedAt: null }
+      data: { revision: { increment: 1 }, deletedAt: null }
     });
 
     await renumberWorkshopRunGroups(tx, groups);
@@ -755,11 +701,12 @@ export async function permanentlyDeleteWorkshopRunAction(formData: FormData) {
   const access = await requireSiteAdminAccess();
   const returnTo = readSafeSiteAdminReturnPath(formData);
   if (!access.canManageSystemSettings) {
+    await recordSiteAdminFailure(access, { action: "permanentlyDeleteWorkshopRunAction", resourceType: "admin" }, "DENIED");
     redirectWithError("hard-delete-permission", returnTo);
   }
 
   const id = readRequiredString(formData, "id");
-  await db.$transaction(async (tx) => {
+  await withSiteAdminMutation(access, { action: "permanentlyDeleteWorkshopRunAction", resourceType: "workshopRun", resourceId: formData.get("id")?.toString().slice(0, 200) }, async (tx) => {
     const groups = await getWorkshopRunNumberingGroups(tx, [id]);
 
     await tx.workshopRun.deleteMany({
@@ -800,21 +747,22 @@ export async function bulkScheduleTrashAction(formData: FormData) {
 
   if (action === "trash") {
     const deletedAt = new Date();
-    await db.$transaction(async (tx) => {
+    await withSiteAdminMutation(access, { action: "bulkScheduleTrashAction", resourceType: "schedule" }, async (tx) => {
       const groups = await getWorkshopRunNumberingGroups(tx, runIds);
 
-      await Promise.all([
+      const results = await Promise.all([
         tx.generalSchedule.updateMany({
           where: { id: { in: generalIds }, deletedAt: null },
           data: { deletedAt }
         }),
         tx.workshopRun.updateMany({
           where: { id: { in: runIds }, deletedAt: null },
-          data: { deletedAt }
+          data: { revision: { increment: 1 }, deletedAt }
         })
       ]);
 
       await renumberWorkshopRunGroups(tx, groups);
+      return { count: results.reduce((total, result) => total + result.count, 0) };
     });
 
     await revalidateSiteAdminContent();
@@ -822,7 +770,7 @@ export async function bulkScheduleTrashAction(formData: FormData) {
   }
 
   if (action === "restore") {
-    await db.$transaction(async (tx) => {
+    await withSiteAdminMutation(access, { action: "bulkScheduleTrashAction", resourceType: "schedule" }, async (tx) => {
       const groups = await getWorkshopRunNumberingGroups(tx, runIds);
       const restoreTasks = [];
       if (generalIds.length > 0) {
@@ -837,13 +785,14 @@ export async function bulkScheduleTrashAction(formData: FormData) {
         restoreTasks.push(
           tx.workshopRun.updateMany({
             where: { id: { in: runIds }, deletedAt: { not: null } },
-            data: { deletedAt: null }
+            data: { revision: { increment: 1 }, deletedAt: null }
           })
         );
       }
 
-      await Promise.all(restoreTasks);
+      const results = await Promise.all(restoreTasks);
       await renumberWorkshopRunGroups(tx, groups);
+      return { count: results.reduce((total, result) => total + result.count, 0) };
     });
 
     await revalidateSiteAdminContent();
@@ -852,18 +801,20 @@ export async function bulkScheduleTrashAction(formData: FormData) {
 
   if (action === "permanent-delete") {
     if (!access.canManageSystemSettings) {
-      redirectWithError("hard-delete-permission", returnTo);
+      await recordSiteAdminFailure(access, { action: "bulkScheduleTrashAction", resourceType: "admin" }, "DENIED");
+    redirectWithError("hard-delete-permission", returnTo);
     }
 
-    await db.$transaction(async (tx) => {
+    await withSiteAdminMutation(access, { action: "bulkScheduleTrashAction", resourceType: "schedule" }, async (tx) => {
       const groups = await getWorkshopRunNumberingGroups(tx, runIds);
 
-      await Promise.all([
+      const results = await Promise.all([
         tx.generalSchedule.deleteMany({ where: { id: { in: generalIds }, deletedAt: { not: null } } }),
         tx.workshopRun.deleteMany({ where: { id: { in: runIds }, deletedAt: { not: null } } })
       ]);
 
       await renumberWorkshopRunGroups(tx, groups);
+      return { count: results.reduce((total, result) => total + result.count, 0) };
     });
 
     await revalidateSiteAdminContent();
@@ -932,7 +883,8 @@ function parseWorkshopRunPayload(
   const visibility = parseVisibility(candidate.visibility);
   const applicationFormUrl = normalizeOptionalSurveyFormUrl(candidate.applicationFormUrl);
   const noticePostId = normalizeOptionalNoticePostId(candidate.noticePostId);
-  const description = normalizeOptionalString(candidate.description);
+  const rawDescription = normalizeOptionalString(candidate.description);
+  const description = rawDescription ? sanitizePostBody(rawDescription) : null;
   const yearHint = typeof candidate.year === "number" && Number.isFinite(candidate.year) ? candidate.year : undefined;
 
   const parsedStages = stages.map((stage, stageIndex) => parseStage(stage, stageIndex, validStageNames));
@@ -1315,12 +1267,12 @@ export async function updateAuthorProfileAction(formData: FormData) {
     redirect(`/site-admin?section=${safeReturnSection}&error=display-name-invalid`);
   }
 
-  await db.authorProfile.update({
+  await withSiteAdminMutation(access, { action: "updateAuthorProfileAction", resourceType: "authorProfile", fields: ["displayName"] }, (tx) => tx.authorProfile.update({
     where: {
       userId: access.appUserId
     },
     data: { displayName }
-  });
+  }));
 
   await revalidateSiteAdminContent();
   redirect(`/site-admin?section=${safeReturnSection}&message=profile-updated`);
@@ -1343,12 +1295,12 @@ export async function saveAuthorDisplayNameAction(
     };
   }
 
-  await db.authorProfile.update({
+  await withSiteAdminMutation(access, { action: "saveAuthorDisplayNameAction", resourceType: "authorProfile", fields: ["displayName"] }, (tx) => tx.authorProfile.update({
     where: {
       userId: access.appUserId
     },
     data: { displayName }
-  });
+  }));
 
   await revalidateSiteAdminContent();
 
@@ -1680,16 +1632,5 @@ function isNextRedirectError(error: unknown) {
 }
 
 function serializeSiteAdminActionError(error: unknown) {
-  if (error instanceof Error) {
-    return {
-      message: error.message,
-      name: error.name,
-      stack: error.stack
-    };
-  }
-
-  return {
-    message: String(error),
-    name: typeof error
-  };
+  return { name: error instanceof Error ? error.name : typeof error };
 }

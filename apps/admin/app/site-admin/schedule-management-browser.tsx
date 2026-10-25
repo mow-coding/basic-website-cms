@@ -33,6 +33,7 @@ export type ScheduleManagementGeneralItem = {
 };
 
 export type ScheduleManagementWorkshopRunItem = {
+  revision: number;
   applicationFormUrl: string | null;
   description: string | null;
   id: string;
@@ -796,6 +797,7 @@ function getScheduleFormInitialValue(editingSchedule: EditingSchedule): Schedule
     applicationFormUrl: editingSchedule.run.applicationFormUrl,
     description: editingSchedule.run.description,
     id: editingSchedule.run.id,
+    revision: editingSchedule.run.revision,
     kind: "workshop",
     noticePostId: editingSchedule.run.noticePostId,
     stages: editingSchedule.run.stages.map((stage) => ({
