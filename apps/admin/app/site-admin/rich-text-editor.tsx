@@ -198,6 +198,7 @@ export function RichTextEditor({
     () => ({
       automatic_uploads: true,
       branding: false,
+      convert_urls: false,
       content_css: false,
       content_style: `
         body {
@@ -437,7 +438,7 @@ export function RichTextEditor({
 
       progress(100);
       setMessage("완료: 본문 이미지를 삽입했습니다.");
-      return getAdminFileHref(uploadedBlob.url, window.location.origin);
+      return getAdminFileHref(uploadedBlob.url);
     } catch (error) {
       const message = error instanceof Error ? error.message : "본문 이미지 업로드에 실패했습니다.";
       setMessage(message);

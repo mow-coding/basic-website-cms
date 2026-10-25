@@ -24,6 +24,7 @@ export async function resolveSiteAdminAccess(): Promise<SiteAdminAccess | null> 
     where: { email: user.email },
     select: {
       id: true,
+      googleSubject: true,
       authorProfile: {
         select: {
           displayName: true
@@ -31,6 +32,10 @@ export async function resolveSiteAdminAccess(): Promise<SiteAdminAccess | null> 
       }
     }
   });
+
+  if (!existingUser || user.authProvider !== "google" || existingUser.id !== user.userId || existingUser.googleSubject !== user.googleSubject) {
+    return null;
+  }
 
   if (existingUser?.authorProfile) {
     return {
@@ -43,50 +48,15 @@ export async function resolveSiteAdminAccess(): Promise<SiteAdminAccess | null> 
 
   const defaultDisplayName = account?.defaultDisplayName ?? user.name ?? "관리자";
 
-  if (existingUser) {
-    const profile = await db.authorProfile.upsert({
-      where: {
-        userId: existingUser.id
-      },
-      create: {
-        userId: existingUser.id,
-        displayName: defaultDisplayName
-      },
-      update: {}
-    });
-
-    return {
-      user,
-      appUserId: existingUser.id,
-      displayName: profile.displayName,
-      canManageSystemSettings: canManageSiteSystemSettings(user.email)
-    };
-  }
-
-  const appUser = await db.user.create({
-    data: {
-      email: user.email,
-      name: user.name ?? account?.defaultDisplayName,
-      authorProfile: {
-        create: {
-          displayName: defaultDisplayName
-        }
-      }
-    },
-    select: {
-      id: true,
-      authorProfile: {
-        select: {
-          displayName: true
-        }
-      }
-    }
+  const profile = await db.authorProfile.upsert({
+    where: { userId: existingUser.id },
+    create: { userId: existingUser.id, displayName: defaultDisplayName },
+    update: {}
   });
-
   return {
     user,
-    appUserId: appUser.id,
-    displayName: appUser.authorProfile?.displayName ?? defaultDisplayName,
+    appUserId: existingUser.id,
+    displayName: profile.displayName,
     canManageSystemSettings: canManageSiteSystemSettings(user.email)
   };
 }

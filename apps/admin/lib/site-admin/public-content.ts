@@ -1,3 +1,4 @@
+import { runEndTime, workshopStatus } from "@/lib/site-admin/schedule-status";
 import { Prisma, SiteContentVisibility, SitePostCategory, type SitePost } from "@prisma/client";
 import { db } from "@/lib/db";
 import {
@@ -318,18 +319,7 @@ function pickDisplayRun(runs: WorkshopRunWithRelations[]) {
     .sort((a, b) => (pickRunEndTime(b) ?? 0) - (pickRunEndTime(a) ?? 0))[0] ?? null;
 }
 
-function pickRunEndTime(run: NonNullable<WorkshopRunWithRelations>) {
-  let latest: number | null = null;
-  for (const stage of run.stages) {
-    for (const session of stage.sessions) {
-      const time = session.sessionDate.getTime();
-      if (latest === null || time > latest) {
-        latest = time;
-      }
-    }
-  }
-  return latest;
-}
+function pickRunEndTime(run: NonNullable<WorkshopRunWithRelations>) { return runEndTime(run); }
 
 function pickEarliestApplication(run: NonNullable<WorkshopRunWithRelations> | null) {
   if (!run) {
@@ -393,31 +383,7 @@ function pickLatestSession(run: NonNullable<WorkshopRunWithRelations> | null) {
   return latest?.toISOString() ?? null;
 }
 
-function resolveWorkshopStatusFromRun(run: NonNullable<WorkshopRunWithRelations> | null): PublicWorkshopStatus {
-  if (!run || run.stages.length === 0) {
-    return "NO_SCHEDULE";
-  }
-
-  const now = new Date();
-  const earliestEnd = pickRunEndTime(run);
-  if (earliestEnd !== null && earliestEnd < now.getTime()) {
-    return "ENDED";
-  }
-
-  const application = pickEarliestApplication(run);
-  if (application && application.startsAt && application.endsAt) {
-    const start = new Date(application.startsAt).getTime();
-    const end = new Date(application.endsAt).getTime();
-    if (start <= now.getTime() && now.getTime() <= end) {
-      return "OPEN";
-    }
-    if (end < now.getTime()) {
-      return "CLOSED";
-    }
-  }
-
-  return "CLOSED";
-}
+function resolveWorkshopStatusFromRun(run: NonNullable<WorkshopRunWithRelations> | null): PublicWorkshopStatus { return workshopStatus(run); }
 
 function getPublicPostLabels(post: Pick<SitePost, "category" | "labels">) {
   if (post.category === SitePostCategory.COUNSELING) {

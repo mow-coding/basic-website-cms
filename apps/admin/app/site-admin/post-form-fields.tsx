@@ -1,5 +1,6 @@
 import { SiteContentVisibility, SitePostCategory } from "@prisma/client";
 import type { ReactNode } from "react";
+import { adminRichText } from "@/lib/site-admin/image-references";
 import { AttachmentUploader } from "@/app/site-admin/attachment-uploader";
 import { FormSubmitButton } from "@/app/site-admin/form-submit-button";
 import { LinkListInput } from "@/app/site-admin/link-list-input";
@@ -97,7 +98,7 @@ export function PostFormFields({
           </div>
 
           <div className="post-composer-body">
-            <RichTextEditor name="body" initialValue={bodyDefaultValue} />
+            <RichTextEditor name="body" initialValue={adminRichText(bodyDefaultValue)} />
             <div className="editor-attachment-group">
               <div className="editor-attachment-grid">
                 <AttachmentUploader defaultValue={attachmentsDefaultValue} />

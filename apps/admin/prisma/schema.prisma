@@ -28,6 +28,7 @@ enum SiteContentVisibility {
 model User {
   id               String            @id @default(uuid())
   email            String            @unique
+  googleSubject    String?           @unique
   name             String?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -125,6 +126,7 @@ model GeneralSchedule {
 
 model WorkshopRun {
   id                 String                @id @default(uuid())
+  revision           Int                   @default(0)
   authorUserId       String?
   workshopSlug       String
   year               Int

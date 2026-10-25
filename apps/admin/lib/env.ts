@@ -21,6 +21,7 @@ const envSchema = z.object({
   PRIVATE_BLOB_READ_WRITE_TOKEN: optionalEnvString,
   PRIVATE_BLOB_HOST: optionalEnvString,
   LEGACY_PUBLIC_BLOB_HOST: optionalEnvString,
+  LEGACY_ADMIN_ORIGINS: optionalEnvString,
   SITE_REVALIDATE_URL: optionalEnvUrl,
   SITE_REVALIDATE_SECRET: optionalEnvString
 });
@@ -37,6 +38,7 @@ const raw = envSchema.parse({
   PRIVATE_BLOB_READ_WRITE_TOKEN: process.env.PRIVATE_BLOB_READ_WRITE_TOKEN,
   PRIVATE_BLOB_HOST: process.env.PRIVATE_BLOB_HOST,
   LEGACY_PUBLIC_BLOB_HOST: process.env.LEGACY_PUBLIC_BLOB_HOST,
+  LEGACY_ADMIN_ORIGINS: process.env.LEGACY_ADMIN_ORIGINS,
   SITE_REVALIDATE_URL: process.env.SITE_REVALIDATE_URL,
   SITE_REVALIDATE_SECRET: process.env.SITE_REVALIDATE_SECRET
 });

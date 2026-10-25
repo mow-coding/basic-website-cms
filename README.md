@@ -1,5 +1,7 @@
 # Basic Website CMS
 
+업데이트 내역은 [패치노트](CHANGELOG.md), 기존 사이트의 안전한 업데이트 순서는 [업그레이드 안내](docs/UPGRADING.md)에서 확인할 수 있습니다.
+
 **브랜드의 이야기를 전하는 화면부터, 꾸준히 운영할 수 있는 관리 기능까지.**
 
 Basic Website CMS는 **방문자용 웹사이트 디자인, 콘텐츠 관리 시스템, AI 코딩 도우미를 위한 안내서**를 함께 제공하는 웹사이트 스타터 키트입니다.
@@ -121,7 +123,7 @@ Copy-Item apps/admin/.env.example apps/admin/.env.local
 환경변수를 채운 뒤 관리자 데이터베이스를 준비합니다.
 
 ```bash
-npm run admin:db:push
+npm run admin:db:deploy
 npm run admin:seed
 npm run admin:seed:sample
 ```
