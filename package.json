@@ -1,6 +1,6 @@
 {
   "name": "basic-website-cms",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "작은 조직을 위한 공개 웹사이트 + 관리자 콘솔 템플릿",
   "license": "MIT",
